@@ -119,23 +119,22 @@ class BackendController extends ActionController
 
     /**
      * Action to save site-level settings
+     *
+     * @param int $id The page ID (0 for root)
+     * @param array $settings The settings array from the form
      */
-    public function saveSettingsAction(): ResponseInterface
+    public function saveSettingsAction(int $id = 0, array $settings = []): ResponseInterface
     {
-        $params = $this->request->getParsedBody();
-        $pageId = (int)($params['id'] ?? 0);
-        
-        if ($pageId <= 0) {
+        // Allow id >= 0 to support root node (global settings)
+        if ($id < 0) {
             return $this->redirect('index');
         }
 
-        $postData = $params['settings'] ?? [];
-        
         $config = [
-            'lcp' => (string)($postData['thresholds']['lcp'] ?? '2.5'),
-            'cls' => (string)($postData['thresholds']['cls'] ?? '0.1'),
-            'inp' => (string)($postData['thresholds']['inp'] ?? '200'),
-            'auto_lazyloading' => ($postData['auto_lazyloading'] ?? '0') === '1' ? '1' : '0'
+            'lcp' => (string)($settings['thresholds']['lcp'] ?? '2.5'),
+            'cls' => (string)($settings['thresholds']['cls'] ?? '0.1'),
+            'inp' => (string)($settings['thresholds']['inp'] ?? '200'),
+            'auto_lazyloading' => ($settings['auto_lazyloading'] ?? '0') === '1' ? '1' : '0'
         ];
 
         // Save to Global Extension Configuration
@@ -143,7 +142,7 @@ class BackendController extends ActionController
         
         $this->addFlashMessage('Global settings saved successfully.');
 
-        return $this->redirect('index', null, null, ['id' => $pageId]);
+        return $this->redirect('index', null, null, ['id' => $id]);
     }
 
     /**

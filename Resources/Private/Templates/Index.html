@@ -1,6 +1,7 @@
 <f:layout name="Backend" />
 
 <f:section name="Content">
+    <f:flashMessages />
     <div class="module-alice">
         <div class="alice-header">
             <h1><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:header.title" /></h1>
@@ -159,23 +160,23 @@
                     <h2><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:settings.title" /></h2>
                     <p class="alice-intro"><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:settings.intro" /></p>
                     
-                    <form action="{f:uri.action(action: 'saveSettings')}" method="POST">
-                        <input type="hidden" name="id" value="{pageId}" />
+                    <f:form action="saveSettings" method="POST">
+                        <f:form.hidden name="id" value="{pageId}" />
                         
                         <div class="settings-section">
                             <h3><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:settings.section.thresholds" /></h3>
                             <div class="settings-row">
                                 <div class="settings-field">
                                     <label>LCP (s)</label>
-                                    <input type="text" name="settings[thresholds][lcp]" value="{settings.thresholds.lcp}" class="form-control" />
+                                    <f:form.textfield name="settings[thresholds][lcp]" value="{settings.thresholds.lcp}" class="form-control" />
                                 </div>
                                 <div class="settings-field">
                                     <label>CLS</label>
-                                    <input type="text" name="settings[thresholds][cls]" value="{settings.thresholds.cls}" class="form-control" />
+                                    <f:form.textfield name="settings[thresholds][cls]" value="{settings.thresholds.cls}" class="form-control" />
                                 </div>
                                 <div class="settings-field">
                                     <label>INP (ms)</label>
-                                    <input type="text" name="settings[thresholds][inp]" value="{settings.thresholds.inp}" class="form-control" />
+                                    <f:form.textfield name="settings[thresholds][inp]" value="{settings.thresholds.inp}" class="form-control" />
                                 </div>
                             </div>
                         </div>
@@ -184,7 +185,7 @@
                             <h3><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:settings.section.audit_rules" /></h3>
                             <div class="settings-field checkbox-field">
                                 <label class="alice-switch" for="auto-lazyloading">
-                                    <input type="checkbox" name="settings[auto_lazyloading]" value="1" {f:if(condition: settings.auto_lazyloading, then: 'checked')} id="auto-lazyloading" />
+                                    <f:form.checkbox name="settings[auto_lazyloading]" value="1" checked="{settings.auto_lazyloading}" id="auto-lazyloading" />
                                     <span class="alice-switch-slider"></span>
                                 </label>
                                 <label for="auto-lazyloading" class="alice-switch-label">
@@ -194,11 +195,11 @@
                         </div>
 
                         <div class="settings-actions">
-                            <button type="submit" class="btn-alice-audit">
+                            <f:form.button type="submit" class="btn-alice-audit">
                                 <f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:settings.button.save" />
-                            </button>
+                            </f:form.button>
                         </div>
-                    </form>
+                    </f:form>
                 </div>
             </div>
         </f:if>
