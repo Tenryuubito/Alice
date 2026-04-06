@@ -45,6 +45,11 @@
              data-labels-loading-eager="{f:translate(key: 'LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.loading_eager')}"
              data-labels-loading-lazy="{f:translate(key: 'LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.loading_lazy')}"
              data-labels-path="{f:translate(key: 'LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.path')}"
+             data-labels-internal="{f:translate(key: 'LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.internal')}"
+             data-labels-external="{f:translate(key: 'LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.external')}"
+             data-labels-text="{f:translate(key: 'LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.text')}"
+             data-labels-time="{f:translate(key: 'LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.load_time')}"
+             data-labels-no-links="{f:translate(key: 'LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.no_links')}"
              data-error-timeout="{f:translate(key: 'LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:error.timeout')}"
              data-error-access="{f:translate(key: 'LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:error.access_denied')}"
              data-error-network="{f:translate(key: 'LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:error.network')}"
@@ -140,6 +145,40 @@
                                     <span class="alice-meta-content">{meta.content -> f:format.crop(maxCharacters: 50)}</span>
                                 </li>
                             </f:for>
+                        </f:if>
+                    </ul>
+                </div>
+
+                <!-- Links Audit -->
+                <div class="alice-card">
+                    <h3><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:audit.links" /></h3>
+                    <ul id="link-audit-list" class="alice-audit-list">
+                        <f:for each="{analysis.results.links}" as="link">
+                            <li class="alice-audit-item">
+                                <details class="alice-image-accordion">
+                                    <summary>
+                                        <span class="alice-status-icon {f:if(condition: link.accessible, then: 'status-ok', else: 'status-fail')}">
+                                            {f:if(condition: link.accessible, then: '✔', else: '✘')}
+                                        </span>
+                                        <span class="alice-filename">{link.text -> f:format.crop(maxCharacters: 40)}</span>
+                                        <span class="alice-badge {f:if(condition: link.isExternal, then: 'badge-external', else: 'badge-internal')}">
+                                            {f:if(condition: link.isExternal, then: '{f:translate(key: \'LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.external\')}', else: '{f:translate(key: \'LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.internal\')}')}
+                                        </span>
+                                        <i class="fa fa-angle-down alice-chevron"></i>
+                                    </summary>
+                                    <div class="alice-accordion-content">
+                                        <div class="alice-link-detail"><strong>URL:</strong> <a href="{link.url}" target="_blank">{link.url}</a></div>
+                                        <div class="alice-link-detail"><strong><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.text" />:</strong> {link.text}</div>
+                                        <div class="alice-link-detail"><strong>Status:</strong> {link.status}</div>
+                                        <div class="alice-link-detail"><strong><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.load_time" />:</strong> {link.time}ms</div>
+                                    </div>
+                                </details>
+                            </li>
+                        </f:for>
+                        <f:if condition="{analysis.results.links -> f:count()} == 0">
+                            <li class="alice-audit-item">
+                                <f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.no_links" />
+                            </li>
                         </f:if>
                     </ul>
                 </div>

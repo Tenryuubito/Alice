@@ -39,6 +39,11 @@ document.addEventListener('DOMContentLoaded', function() {
         errorSelection: resultsContainer.dataset.errorSelection || 'Selection Error.',
         errorRoute: resultsContainer.dataset.errorRoute || 'Route Error: Missing Analyze URI',
         errorUnknown: resultsContainer.dataset.errorUnknown || 'Unknown Server Error',
+        internal: resultsContainer.dataset.labelsInternal || 'Internal',
+        external: resultsContainer.dataset.labelsExternal || 'External',
+        text: resultsContainer.dataset.labelsText || 'Link Text',
+        time: resultsContainer.dataset.labelsTime || 'Load Time',
+        noLinks: resultsContainer.dataset.labelsNoLinks || 'No links found on this page.',
         seoMissing: {
             'error.missing_title': resultsContainer.dataset.seoMissingTitle || 'Missing title',
             'error.missing_description': resultsContainer.dataset.seoMissingDescription || 'Missing description',
@@ -296,12 +301,47 @@ document.addEventListener('DOMContentLoaded', function() {
                     seo.inventory.forEach((meta: any) => {
                         const li = document.createElement('li');
                         li.className = 'alice-audit-info-item';
-                        const croppedContent = meta.content.length > 50 ? meta.content.substring(0, 50) + '...' : meta.content;
+                        const content = meta.content || '';
+                        const croppedContent = content.length > 50 ? content.substring(0, 50) + '...' : content;
                         li.innerHTML = `
                             <span class="alice-meta-name">${meta.name}:</span>
                             <span class="alice-meta-content">${croppedContent}</span>
                         `;
                         seoList.appendChild(li);
+                    });
+                }
+            }
+        }
+
+        if (analysis.results && analysis.results.links) {
+            const linkList = document.getElementById('link-audit-list');
+            if (linkList) {
+                linkList.innerHTML = '';
+                if (analysis.results.links.length === 0) {
+                    const li = document.createElement('li');
+                    li.className = 'alice-audit-item';
+                    li.innerHTML = labels.noLinks;
+                    linkList.appendChild(li);
+                } else {
+                    analysis.results.links.forEach((link: any) => {
+                        const li = document.createElement('li');
+                        li.className = 'alice-audit-item';
+                        li.innerHTML = `
+                            <details class="alice-image-accordion">
+                                <summary>
+                                    <span class="alice-status-icon ${link.accessible ? 'status-ok' : 'status-fail'}">${link.accessible ? '✔' : '✘'}</span>
+                                    <span class="alice-filename">${link.text.length > 40 ? link.text.substring(0, 40) + '...' : link.text}</span>
+                                    <span class="alice-badge ${link.isExternal ? 'badge-external' : 'badge-internal'}">${link.isExternal ? labels.external : labels.internal}</span>
+                                    <i class="fa fa-angle-down alice-chevron"></i>
+                                </summary>
+                                <div class="alice-accordion-content">
+                                    <div class="alice-link-detail"><strong>URL:</strong> <a href="${link.url}" target="_blank">${link.url}</a></div>
+                                    <div class="alice-link-detail"><strong>${labels.text}:</strong> ${link.text}</div>
+                                    <div class="alice-link-detail"><strong>Status:</strong> ${link.status}</div>
+                                    <div class="alice-link-detail"><strong>${labels.time}:</strong> ${link.time}ms</div>
+                                </div>
+                            </details>`;
+                        linkList.appendChild(li);
                     });
                 }
             }

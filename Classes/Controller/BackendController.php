@@ -178,7 +178,7 @@ class BackendController extends ActionController
             $html = (string)$response->getBody();
 
             // 2. Perform SEO & Image Audit
-            $results = $this->performHtmlAudit($html);
+            $results = $this->performHtmlAudit($html, $url);
 
             // 3. Collect Web Vitals from POST data
             $postData = $this->request->getParsedBody()['vitals'] ?? [];
@@ -249,11 +249,12 @@ class BackendController extends ActionController
         }
     }
 
-    protected function performHtmlAudit(string $html): array
+    protected function performHtmlAudit(string $html, string $baseUrl = ''): array
     {
         $results = [
             'images' => [],
-            'seo' => []
+            'seo' => [],
+            'links' => []
         ];
 
         if (empty($html)) {
@@ -267,13 +268,12 @@ class BackendController extends ActionController
         @$dom->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
         $xpath = new \DOMXPath($dom);
 
-        // Images: Support <img> and <picture> patterns
+        // --- Images ---
         foreach ($dom->getElementsByTagName('img') as $img) {
             if (!$img instanceof \DOMElement) {
                 continue;
             }
             
-            // Extract technical attributes
             $src = $img->getAttribute('src');
             if (empty($src)) {
                 $src = $img->getAttribute('data-src') ?: $img->getAttribute('srcset') ?: '';
@@ -308,18 +308,78 @@ class BackendController extends ActionController
             ];
         }
 
-        // Advanced SEO Check
+        // --- Links ---
+        $links = $dom->getElementsByTagName('a');
+        $count = 0;
+        $maxLinks = 50; 
+        
+        $baseHost = parse_url($baseUrl, PHP_URL_HOST) ?: '';
+
+        foreach ($links as $link) {
+            if (!$link instanceof \DOMElement || $count >= $maxLinks) {
+                continue;
+            }
+
+            $href = $link->getAttribute('href');
+            $text = trim($link->textContent) ?: '---';
+            
+            if (empty($href) || str_starts_with($href, '#') || str_starts_with($href, 'javascript:') || str_starts_with($href, 'mailto:') || str_starts_with($href, 'tel:')) {
+                continue;
+            }
+
+            // Resolve URL
+            $fullUrl = $href;
+            if (!str_starts_with($href, 'http')) {
+                $fullUrl = rtrim($baseUrl, '/') . '/' . ltrim($href, '/');
+            }
+
+            $linkHost = parse_url($fullUrl, PHP_URL_HOST) ?: '';
+            $isExternal = !empty($linkHost) && $linkHost !== $baseHost;
+
+            // Audit
+            $start = microtime(true);
+            $statusCode = 0;
+            $accessible = false;
+            
+            try {
+                $response = $this->requestFactory->request($fullUrl, 'HEAD', [
+                    'headers' => ['User-Agent' => 'TYPO3 Alice LinkAuditor'],
+                    'connect_timeout' => 3.0,
+                    'timeout' => 3.0,
+                    'allow_redirects' => true,
+                    'http_errors' => false
+                ]);
+                $statusCode = $response->getStatusCode();
+                $accessible = ($statusCode >= 200 && $statusCode < 400);
+            } catch (\Throwable $e) {
+                $statusCode = 0;
+                $accessible = false;
+            }
+            $duration = round((microtime(true) - $start) * 1000); // ms
+
+            $results['links'][] = [
+                'url' => $fullUrl,
+                'text' => $text,
+                'status' => $statusCode,
+                'accessible' => $accessible,
+                'time' => $duration,
+                'isExternal' => $isExternal
+            ];
+            
+            $count++;
+        }
+
+        // --- SEO ---
         $results['seo'] = [
             'issues' => [],
             'inventory' => []
         ];
 
-        $title = $dom->getElementsByTagName('title');
-        if ($title->length === 0) {
+        $titleNode = $dom->getElementsByTagName('title');
+        if ($titleNode->length === 0) {
             $results['seo']['issues'][] = 'error.missing_title';
         }
 
-        // Mandatory Meta Checks
         $mandatory = ['description', 'keywords', 'robots'];
         foreach ($mandatory as $name) {
             $tag = $xpath->query('//meta[@name="' . $name . '"]/@content');
@@ -328,17 +388,16 @@ class BackendController extends ActionController
             }
         }
 
-        // Discovery: Inventory of all other meta tags
         $metas = $dom->getElementsByTagName('meta');
         foreach ($metas as $meta) {
             if (!$meta instanceof \DOMElement) continue;
             
             $name = $meta->getAttribute('name') ?: $meta->getAttribute('property') ?: $meta->getAttribute('http-equiv');
             $content = $meta->getAttribute('content');
-            $charset = $meta->getAttribute('charset');
+            $status = $meta->getAttribute('charset');
 
-            if ($charset) {
-                $results['seo']['inventory'][] = ['name' => 'charset', 'content' => $charset];
+            if ($status) {
+                $results['seo']['inventory'][] = ['name' => 'charset', 'content' => $status];
             } elseif ($name && $content) {
                 $results['seo']['inventory'][] = ['name' => $name, 'content' => $content];
             }

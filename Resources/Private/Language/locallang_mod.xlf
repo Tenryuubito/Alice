@@ -156,14 +156,28 @@
 			</trans-unit>
 
 			<!-- Audit Details -->
-			<trans-unit id="audit.images" resname="audit.images">
-				<source>Images</source>
-			</trans-unit>
-			<trans-unit id="audit.seo" resname="audit.seo">
-				<source>SEO Checks</source>
+			<trans-unit id="audit.links" resname="audit.links">
+				<source>Links</source>
 			</trans-unit>
 			<trans-unit id="audit.seo_ok" resname="audit.seo_ok">
 				<source>Basic SEO OK</source>
+			</trans-unit>
+
+			<!-- Link Audit Labels -->
+			<trans-unit id="label.internal" resname="label.internal">
+				<source>Internal</source>
+			</trans-unit>
+			<trans-unit id="label.external" resname="label.external">
+				<source>External</source>
+			</trans-unit>
+			<trans-unit id="label.text" resname="label.text">
+				<source>Link Text</source>
+			</trans-unit>
+			<trans-unit id="label.load_time" resname="label.load_time">
+				<source>Load Time</source>
+			</trans-unit>
+			<trans-unit id="label.no_links" resname="label.no_links">
+				<source>No links found on this page.</source>
 			</trans-unit>
 
 			<!-- Error & Warning Messages -->

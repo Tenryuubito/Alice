@@ -209,17 +209,35 @@
 			</trans-unit>
 
 			<!-- Audit Details -->
-			<trans-unit id="audit.images" resname="audit.images">
-				<source>Images</source>
-				<target>Bilder</target>
-			</trans-unit>
-			<trans-unit id="audit.seo" resname="audit.seo">
-				<source>SEO Checks</source>
-				<target>SEO Checks</target>
+			<trans-unit id="audit.links" resname="audit.links">
+				<source>Links</source>
+				<target>Links</target>
 			</trans-unit>
 			<trans-unit id="audit.seo_ok" resname="audit.seo_ok">
 				<source>Basic SEO OK</source>
 				<target>Basis-SEO OK</target>
+			</trans-unit>
+			
+			<!-- Link Audit Labels -->
+			<trans-unit id="label.internal" resname="label.internal">
+				<source>Internal</source>
+				<target>Intern</target>
+			</trans-unit>
+			<trans-unit id="label.external" resname="label.external">
+				<source>External</source>
+				<target>Extern</target>
+			</trans-unit>
+			<trans-unit id="label.text" resname="label.text">
+				<source>Link Text</source>
+				<target>Link-Text</target>
+			</trans-unit>
+			<trans-unit id="label.load_time" resname="label.load_time">
+				<source>Load Time</source>
+				<target>Ladezeit</target>
+			</trans-unit>
+			<trans-unit id="label.no_links" resname="label.no_links">
+				<source>No links found on this page.</source>
+				<target>Keine Links auf dieser Seite gefunden.</target>
 			</trans-unit>
 
 			<!-- Error & Warning Messages -->
