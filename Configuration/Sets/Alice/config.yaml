@@ -1,4 +1,4 @@
 name: tenryuubito/alice
 label: 'Alice Performance Set'
 dependencies:
-  - typo3
+  - typo3/fluid-styled-content
