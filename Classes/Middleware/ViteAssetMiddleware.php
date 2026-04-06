@@ -39,6 +39,11 @@ class ViteAssetMiddleware implements MiddlewareInterface
             return $response;
         }
 
+        // Check if Vite Dev Server is actually reachable
+        if (!$this->isViteDevServerRunning()) {
+            return $response;
+        }
+
         $body = (string)$response->getBody();
         if (empty($body)) {
             return $response;
@@ -97,5 +102,15 @@ class ViteAssetMiddleware implements MiddlewareInterface
 
         $streamFactory = GeneralUtility::makeInstance(StreamFactory::class);
         return $response->withBody($streamFactory->createStream($body));
+    }
+
+    private function isViteDevServerRunning(): bool
+    {
+        $connection = @fsockopen('localhost', 5173, $errno, $errstr, 0.05);
+        if ($connection) {
+            fclose($connection);
+            return true;
+        }
+        return false;
     }
 }

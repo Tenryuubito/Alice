@@ -20,6 +20,14 @@ if (existsSync(entriesPath)) {
   }
 }
 
+// Transform entries to use clean base names for output files
+const cleanEntries: Record<string, string> = {};
+for (const [key, value] of Object.entries(manifest.entries)) {
+    const parts = key.split('/');
+    const name = parts[parts.length - 1];
+    cleanEntries[name] = value as string;
+}
+
 export default defineConfig({
   server: {
     port: 5173,
@@ -49,28 +57,20 @@ export default defineConfig({
     }
   },
   build: {
-    // Force output into the extension directory to ensure TYPO3 resource resolution works
-    outDir: resolve(__dirname),
-    emptyOutDir: false,
+    // Set outDir to the specific Build folder within Resources/Public
+    outDir: resolve(__dirname, 'Resources/Public/Build'),
+    emptyOutDir: true,
     rollupOptions: {
-      input: {
-        ...manifest.entries
-      },
+      input: cleanEntries,
       output: {
-        entryFileNames: 'Resources/Public/Build/JavaScript/[name].js',
-        // Disable code splitting for Alice scripts to ensure they are self-contained.
-        manualChunks: (id) => {
-            if (id.includes('web-vitals')) {
-                return 'Resources/Public/Build/JavaScript/AuditRunner';
-            }
-        },
-        chunkFileNames: 'Resources/Public/Build/JavaScript/[name].js',
+        entryFileNames: 'JavaScript/[name].js',
+        chunkFileNames: 'JavaScript/[name].js',
         assetFileNames: (assetInfo) => {
           const name = assetInfo.name || '';
           if (name.endsWith('.css')) {
-            return 'Resources/Public/Build/Css/Backend.css';
+            return 'Css/Backend.css';
           }
-          return 'Resources/Public/Build/Assets/[name].[ext]';
+          return 'Assets/[name].[ext]';
         }
       }
     }
