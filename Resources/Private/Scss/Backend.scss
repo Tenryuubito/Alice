@@ -7,12 +7,23 @@
 
     --alice-bg: var(--typo3-surface-container-low, #f4f4f4);
     --alice-card-bg: var(--typo3-surface-container-high, #ffffff);
-    --alice-text: var(--typo3-component-color, #222222);
-    --alice-text-light: var(--typo3-component-color-variant, #444444);
+    --alice-text: var(--typo3-component-color, #111111);
+    --alice-text-muted: var(--typo3-component-color-variant, #666666);
     --alice-border: var(--typo3-component-border-color, #d0d0d0);
 
     --alice-accent-bg: var(--typo3-surface-container-base, #f0f0f0);
     --alice-hover-bg: var(--typo3-surface-container-highest, #f8f9fa);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --alice-text: #ffffff;
+        --alice-text-muted: #cdcdcd;
+        --alice-primary: #3db9ff; /* Brighter blue for dark mode */
+        --alice-border: #444444;
+        --alice-card-bg: #212529;
+        --alice-bg: #111417;
+    }
 }
 
 .module-alice {
@@ -152,7 +163,7 @@
 .vital-target {
     font-size: 0.85rem;
     font-weight: 500;
-    color: var(--alice-text-light);
+    color: var(--alice-text-muted);
 }
 
 .alice-details-grid {
@@ -233,7 +244,7 @@
 }
 
 .alice-chevron {
-    color: var(--alice-text-light);
+    color: var(--alice-text-muted);
     margin-left: 1rem;
     transition: transform 0.3s ease;
 }
@@ -264,7 +275,7 @@
 
 .alice-image-detail small {
     word-break: break-all;
-    color: var(--alice-text-light);
+    color: var(--alice-text-muted);
 }
 
 /* Loader Overlay - Matches TYPO3 Modal Backdrop */
@@ -304,7 +315,7 @@
     background: transparent;
     border: none;
     font-size: 1.5rem;
-    color: var(--alice-text-light);
+    color: var(--alice-text-muted);
     cursor: pointer;
 }
 
@@ -319,7 +330,7 @@
     gap: 1rem;
     padding: 0.8rem 0;
     border-bottom: 1px solid var(--alice-border);
-    color: var(--alice-text-light);
+    color: var(--alice-text-muted);
 }
 
 .alice-progress-item.step-active {
@@ -376,15 +387,15 @@
 }
 
 .badge-internal {
-    background: rgba(var(--alice-primary-rgb), 0.1);
-    color: var(--alice-primary);
-    border: 1px solid rgba(var(--alice-primary-rgb), 0.2);
+    background: #007bff;
+    color: #ffffff;
+    border: none;
 }
 
 .badge-external {
-    background: rgba(139, 92, 246, 0.1);
-    color: #8b5cf6;
-    border: 1px solid rgba(139, 92, 246, 0.2);
+    background: #8b5cf6;
+    color: #ffffff;
+    border: none;
 }
 
 .alice-link-detail {
@@ -429,7 +440,7 @@
 }
 
 .alice-intro {
-    color: var(--alice-text-light);
+    color: var(--alice-text-muted);
     margin-bottom: 2rem;
     font-size: 0.95rem;
 }
@@ -442,6 +453,32 @@
 
 .settings-section:last-of-type {
     border-bottom: none;
+}
+
+.settings-section {
+    margin-bottom: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px dotted var(--alice-border);
+
+    h3 {
+        margin-bottom: 1.2rem;
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--alice-primary);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        border-bottom: 2px solid var(--alice-primary);
+        display: inline-block;
+        padding-bottom: 2px;
+    }
+}
+
+.alice-intro {
+    color: var(--alice-text-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    max-width: 800px;
 }
 
 .settings-section h3 {
@@ -475,7 +512,8 @@
     label {
         font-weight: 600;
         font-size: 0.9rem;
-        color: var(--alice-text-light);
+        color: var(--alice-text);
+        opacity: 0.85;
     }
 
     input,
@@ -518,7 +556,7 @@
     margin-top: 1rem;
     border-top: 1px solid var(--alice-border);
     font-size: 0.85rem;
-    color: var(--alice-text-light);
+    color: var(--alice-text-muted);
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
@@ -538,7 +576,7 @@
     }
 
     .alice-meta-content {
-        color: var(--alice-text-light);
+        color: var(--alice-text-muted);
         word-break: break-all;
         white-space: nowrap;
         overflow: hidden;
@@ -549,7 +587,7 @@
 .alice-empty-state {
     text-align: center;
     padding: 4rem 2rem;
-    color: var(--alice-text-light);
+    color: var(--alice-text-muted);
 
     i {
         font-size: 3rem;

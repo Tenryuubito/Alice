@@ -1,5 +1,8 @@
 node_modules/
 Resources/Public/Build/
+Resources/Public/Css/
+Resources/Public/JavaScript/
 vite.entries.json
 .vite-inspect/
 *.tsbuildinfo
+.DS_Store
