@@ -1,5 +1,15 @@
 <?php
 
+/**
+ * This file is part of the "Alice" Extension for TYPO3 CMS.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE file that was distributed with this source code.
+ *
+ * (c) 2026 Tenryuubito
+ */
+
+
 return [
     'frontend' => [
         'tenryuubito/alice/vite-bridge' => [

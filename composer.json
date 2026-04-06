@@ -1,6 +1,7 @@
 {
     "name": "tenryuubito/alice",
     "description": "TYPO3 Site Package for performance & analytics",
+    "license": "GPL-2.0-or-later",
     "type": "typo3-cms-extension",
     "require": {
         "typo3/cms-core": "^14.0",
