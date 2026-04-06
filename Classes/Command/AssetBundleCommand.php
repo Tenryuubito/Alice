@@ -21,6 +21,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Process\Process;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Cache\CacheManager;
 
 /**
  * Command to manage Alice Node.js assets (install, dev, build)
@@ -76,7 +77,13 @@ class AssetBundleCommand extends Command
                 return Command::FAILURE;
             }
 
-            $io->success('Task completed successfully.');
+            if ($input->getOption('build')) {
+                $io->info('Flushing TYPO3 system caches...');
+                GeneralUtility::makeInstance(CacheManager::class)->flushCaches();
+                $io->success('Task completed and caches flushed successfully.');
+            } else {
+                $io->success('Task completed successfully.');
+            }
             return Command::SUCCESS;
 
         } catch (\Throwable $e) {

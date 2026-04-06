@@ -49,44 +49,26 @@ export default defineConfig({
     }
   },
   build: {
-    // Use absolute public path from TYPO3 Environment
-    outDir: manifest.publicPath || '../../../web',
+    // Force output into the extension directory to ensure TYPO3 resource resolution works
+    outDir: resolve(__dirname),
     emptyOutDir: false,
     rollupOptions: {
       input: {
-        // Use absolute entries resolved by TYPO3
         ...manifest.entries
       },
       output: {
-        entryFileNames: '[name].js',
-        // CRITICAL: Disable code splitting for Alice scripts to ensure they are self-contained.
+        entryFileNames: 'Resources/Public/Build/JavaScript/[name].js',
+        // Disable code splitting for Alice scripts to ensure they are self-contained.
         manualChunks: (id) => {
             if (id.includes('web-vitals')) {
-                return 'packages/alice/Resources/Public/Build/JavaScript/AuditRunner';
+                return 'Resources/Public/Build/JavaScript/AuditRunner';
             }
         },
-        chunkFileNames: (chunkInfo) => {
-            const name = chunkInfo.name || '';
-            if (name.includes('alice')) {
-                return 'packages/alice/Resources/Public/Build/JavaScript/[name].js';
-            }
-            // Dynamic fallback for other extensions
-            return '[name]-[hash].js';
-        },
+        chunkFileNames: 'Resources/Public/Build/JavaScript/[name].js',
         assetFileNames: (assetInfo) => {
           const name = assetInfo.name || '';
-          
-          // Determine the extension part from the original file path
-          const originalPath = assetInfo.originalFileNames?.[0] || '';
-          // Extension might be in web/packages/ or vendor/
-          const match = originalPath.match(/(packages|vendor)\/([^\/]+)\//);
-          const extName = match ? match[2] : 'alice';
-
           if (name.endsWith('.css')) {
-            if (extName === 'alice') {
-                return 'packages/alice/Resources/Public/Build/Css/Backend.css';
-            }
-            return `packages/${extName}/Resources/Public/Build/Css/[name].[ext]`;
+            return 'Resources/Public/Build/Css/Backend.css';
           }
           return 'Resources/Public/Build/Assets/[name].[ext]';
         }

@@ -1,5 +1,5 @@
-<f:be.pageRenderer includeCssFiles="{0: 'EXT:alice/Resources/Public/Build/Css/Backend.css'}"
-    includeJsFiles="{0: 'EXT:alice/Resources/Public/Build/JavaScript/Backend.js'}" />
+<f:be.pageRenderer includeCssFiles="{0: 'EXT:alice/Resources/Public/Build/Css/Backend.css?v={f:format.date(date: \'now\', format: \'U\')}'}"
+    includeJsFiles="{0: 'EXT:alice/Resources/Public/Build/JavaScript/Backend.js?v={f:format.date(date: \'now\', format: \'U\')}'}" />
 <div class="module module-alice">
     <div class="module-body">
         <f:render section="Content" />

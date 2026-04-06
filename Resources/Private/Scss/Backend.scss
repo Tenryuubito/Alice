@@ -169,6 +169,7 @@
 
 .alice-audit-item {
     border-bottom: 1px solid var(--alice-border);
+    padding: 1.2rem 0;
 }
 
 .alice-audit-item:last-child {
@@ -207,7 +208,7 @@
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    margin-right: 0.75rem;
+    margin-right: 1.25rem;
     flex-shrink: 0;
 }
 

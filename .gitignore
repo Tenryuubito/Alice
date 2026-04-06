@@ -1,1 +1,5 @@
 node_modules/
+Resources/Public/Build/
+vite.entries.json
+.vite-inspect/
+*.tsbuildinfo
