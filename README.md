@@ -1,12 +1,14 @@
 # Alice Extension (tenryuubito/alice)
 
-**Alice** is a high-performance TYPO3 bridge for modern asset processing (Vite) and a centralized performance analytics dashboard. It is designed to decouple asset compilation from individual extensions while providing deep integration into the TYPO3 ecosystem.
+**Alice** is a high-performance TYPO3 bridge for modern asset processing (Vite) and a centralized performance & SEO analytics dashboard. It is designed to decouple asset compilation from individual extensions while providing deep integration into the TYPO3 ecosystem.
 
 ## Features
 
 - ⚡ **High-Performance Vite Bridge**: Sub-millisecond rebuilds and Hot Module Replacement (HMR).
-- 📊 **Performance Analytics**: Integrated backend module for tracking Core Web Vitals (LCP, CLS, INP).
-- 🖼️ **Auto-LazyLoading**: Middleware that automatically adds `loading="lazy"` to images.
+- 📊 **Performance Analytics**: Integrated dashboard for tracking Core Web Vitals (LCP, CLS, INP).
+- 🔍 **SEO & Link Audit**: Automated server-side checks for meta tags, image accessibility, and link reachability.
+- 🔗 **Link Reachability**: Monitors status codes and load times for both internal and external links.
+- 🖼️ **Image Optimization**: Automated audit for missing alt-tags, dimensions, and lazy-loading compliance.
 - 🏗️ **Centralized Build Engine**: A single Vite configuration that discovers entries across multiple extensions.
 
 ---
@@ -17,14 +19,14 @@
 
 - TYPO3 v13 or v14
 - Node.js (v18+)
-- `php` available in the command line
+- Local PHP environment (or DDEV)
 
 ### 1. Installation
 
-The extension is installed via Composer. To set up the Node.js dependencies for asset processing, run the following command from your project root:
+The extension is installed via Composer. To set up the Node.js dependencies for asset processing, run the following command (using DDEV as example):
 
 ```bash
-./vendor/bin/typo3 alice:bundle --setup
+ddev typo3 alice:bundle --setup
 ```
 
 ### 2. Registering Asset Entries
@@ -38,60 +40,57 @@ $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['alice']['additional_entries'][] = 'EX
 
 ### 3. Development Mode (HMR)
 
-For the best development experience with instant updates (Hot Module Replacement), start the Vite dev server from the project root:
+For the best development experience with instant updates, start the Vite dev server:
 
 ```bash
-./vendor/bin/typo3 alice:bundle --dev
+ddev typo3 alice:bundle --dev
 ```
 
-**Important**: In `Development` context, Alice automatically redirects asset URLs to `http://localhost:5173`. Make sure the dev server is running!
+**Important**: In `Development` context, Alice automatically redirects asset URLs to the dev server. The `ViteAssetMiddleware` handles connectivity checks to prevent errors if the server is offline.
 
 ### 4. Build for Production
 
-To generate optimized, static files for deployment, run the build command from your project root:
+To generate optimized, static files for deployment:
 
 ```bash
-./vendor/bin/typo3 alice:bundle --build
+ddev typo3 alice:bundle --build
 ```
-
-This will output the compiled assets into the `Resources/Public/Build/` directory of the respective extensions.
 
 ---
 
 ## Editor Guide
 
-### Performance Dashboard
+### Performance & Audit Dashboard
 
-Alice provides a top-level backend module located in the primary sidebar under **Alice**.
+Alice provides a top-level backend module located in the primary sidebar.
 
-- **Dashboard**: View the current vitals of your site (LCP, CLS, INP).
-- **Thresholds**: The module highlights metrics that exceed the configured targets.
-- **Site Configuration**: Admins can manage global performance thresholds directly within the module.
+- **Vitals Dashboard**: Real-time measurements of LCP, CLS, and INP performed directly in an isolated iframe.
+- **SEO Check**: Validates meta titles, descriptions, and robots tags.
+- **Bilder-Check**: Lists all images on the page, highlighting missing Alt-tags or missing width/height attributes.
+- **Link-Check**: Scans all links on the page, categorizes them (Internal/External), and verifies reachability with a 3s timeout.
 
 ---
 
 ## Configuration
 
-Settings can be changed via **System > Settings > Extension Configuration > Alice**:
+Settings can be managed via **Site Configuration** (for Site Roots) or **Extension Configuration**:
 
-- **Auto LazyLoading**: Toggle the automatic `loading="lazy"` middleware.
-- **LCP Target**: Set the target value for Largest Contentful Paint (default: 2.5s).
-- **CLS Target**: Set the target value for Cumulative Layout Shift (default: 0.1).
-- **INP Target**: Set the target value for Interaction to Next Paint (default: 200ms).
+- **Auto LazyLoading**: Toggle the automatic `loading="lazy"` middleware for all frontend images.
+- **Thresholds**: Define custom "Good/Poor" targets for LCP, CLS, and INP.
+- **Audit Rules**: Enable/Disable specific audit components across the site.
 
 ---
 
 ## Technical Details
 
-### Vite Bridge Logic
+### Audit Engine
 
-1.  The `alice:export-vite-config` command reads all registered entries from TYPO3.
-2.  It generates a `vite.entries.json` containing the mapping.
-3.  The `vite.config.ts` uses this manifest to define the Rollup input.
-4.  The `ViteAssetMiddleware` rewrites URLs in `Development` context to point to the source files on the dev server.
+The Alice Audit engine uses a hybrid approach:
+- **Client-Side**: Injected scripts measure real-user metrics (Core Web Vitals) within a sandboxed iframe.
+- **Server-Side**: The `BackendController` performs deep HTML analysis and HTTP reachability tests for assets and links.
 
 ### Middlewares
 
 Alice registers two middlewares in the `frontend` stack:
-1.  `tenryuubito/alice/vite-bridge`: Rewrites asset URLs during development.
-2.  `tenryuubito/alice/lazy-loading`: Post-processes the HTML to optimize image loading.
+1. `tenryuubito/alice/vite-bridge`: Manages asset URL rewriting and dev server proxies.
+2. `tenryuubito/alice/lazy-loading`: Post-processes HTML to optimize image loading attributes.
