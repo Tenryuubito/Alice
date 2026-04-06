@@ -209,9 +209,17 @@
 			</trans-unit>
 
 			<!-- Audit Details -->
+			<trans-unit id="audit.images" resname="audit.images">
+				<source>Images</source>
+				<target>Bilder-Check</target>
+			</trans-unit>
+			<trans-unit id="audit.seo" resname="audit.seo">
+				<source>SEO Check</source>
+				<target>SEO-Check</target>
+			</trans-unit>
 			<trans-unit id="audit.links" resname="audit.links">
 				<source>Links</source>
-				<target>Links</target>
+				<target>Link-Check</target>
 			</trans-unit>
 			<trans-unit id="audit.seo_ok" resname="audit.seo_ok">
 				<source>Basic SEO OK</source>
