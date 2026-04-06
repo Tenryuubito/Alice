@@ -1,0 +1,28 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  Tenryuubito\Alice\:
+    resource: '../Classes/*'
+    exclude: '../Classes/Domain/Model/*'
+
+  Tenryuubito\Alice\Controller\BackendController:
+    public: true
+    tags:
+      - name: backend.controller
+
+  Tenryuubito\Alice\Command\ExportViteConfigCommand:
+    tags:
+      - name: 'console.command'
+        command: 'alice:export-vite-config'
+        description: 'Exports the Vite entry configuration from TYPO3 registry'
+        schedulable: true
+
+  Tenryuubito\Alice\Command\AssetBundleCommand:
+    tags:
+      - name: 'console.command'
+        command: 'alice:bundle'
+        description: 'Handles Alice Node.js asset management (setup, build, dev)'
+        schedulable: true

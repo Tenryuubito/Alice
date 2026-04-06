@@ -1,0 +1,4 @@
+name: tenryuubito/alice
+label: 'Alice Performance Set'
+dependencies:
+  - typo3

@@ -1,0 +1,510 @@
+:root {
+    /* Alice Tokens - Mapped to TYPO3 Design System (v12/v13) */
+    --alice-primary: var(--typo3-state-info-bg, crimson);
+    --alice-success: var(--typo3-state-success-color, #28a745);
+    --alice-warning: var(--typo3-state-warning-color, #ffc107);
+    --alice-danger: var(--typo3-state-danger-color, #dc3545);
+
+    --alice-bg: var(--typo3-surface-container-low, #f8f9fa);
+    --alice-card-bg: var(--typo3-surface-container-high, #ffffff);
+    --alice-text: var(--typo3-component-color, #333333);
+    --alice-text-light: var(--typo3-component-color-variant, #666666);
+    --alice-border: var(--typo3-component-border-color, #e0e0e0);
+
+    --alice-accent-bg: var(--typo3-surface-container-base, #f0f0f0);
+    --alice-hover-bg: var(--typo3-surface-container-highest, #f8f9fa);
+}
+
+.module-alice {
+    background: var(--alice-bg);
+    min-height: 100vh;
+    font-family: var(--typo3-font-family);
+    color: var(--alice-text);
+    padding: 2rem;
+}
+
+.alice-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--alice-border);
+}
+
+.alice-header h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--alice-text);
+}
+
+.alice-controls {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.alice-last-audit {
+    font-size: 0.9rem;
+    color: var(--alice-text-light);
+    background: var(--alice-accent-bg);
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+}
+
+.btn-alice-audit {
+    background: var(--typo3-state-info-bg, #007bff);
+    color: var(--typo3-state-info-color, #fff);
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-alice-audit:hover {
+    background: var(--typo3-state-info-hover-bg, #0069d9);
+}
+
+.btn-alice-audit:active {
+    transform: translateY(1px);
+}
+
+.alice-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.alice-card {
+    background: var(--alice-card-bg);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    border: 1px solid var(--alice-border);
+    color: var(--alice-text);
+}
+
+.alice-card h3 {
+    margin-top: 0;
+    margin-bottom: 1.2rem;
+    font-size: 1.1rem;
+    border-bottom: 1px solid var(--alice-border);
+    padding-bottom: 0.5rem;
+    color: var(--alice-text);
+}
+
+.vital-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: transform 0.2s;
+}
+
+.vital-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--alice-text-light);
+}
+
+.vital-value {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin: 0.5rem 0;
+    color: var(--alice-text);
+}
+
+.vital-status {
+    padding: 0.3rem 1rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+}
+
+/* Dynamic State Colors for Vitals */
+.bg-good {
+    background: var(--typo3-state-success-bg, #d4edda);
+    color: var(--typo3-state-success-color, #155724);
+}
+
+.bg-med {
+    background: var(--typo3-state-warning-bg, #fff3cd);
+    color: var(--typo3-state-warning-color, #856404);
+}
+
+.bg-poor {
+    background: var(--typo3-state-danger-bg, #f8d7da);
+    color: var(--typo3-state-danger-color, #721c24);
+}
+
+.vital-target {
+    font-size: 0.8rem;
+    color: var(--alice-text-light);
+}
+
+.alice-details-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.alice-audit-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.alice-audit-item {
+    border-bottom: 1px solid var(--alice-border);
+}
+
+.alice-audit-item:last-child {
+    border-bottom: none;
+}
+
+/* Accordion Specifics */
+.alice-image-accordion {
+    width: 100%;
+}
+
+.alice-image-accordion summary {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    padding: 0.75rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.2s;
+    outline: none;
+    color: var(--alice-text);
+}
+
+.alice-image-accordion summary::-webkit-details-marker {
+    display: none;
+}
+
+.alice-image-accordion summary:hover {
+    background: var(--alice-hover-bg);
+}
+
+.alice-status-icon {
+    width: 24px;
+    height: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin-right: 0.75rem;
+    flex-shrink: 0;
+}
+
+.status-ok {
+    background: var(--typo3-state-success-bg, #e6f4ea);
+    color: var(--typo3-state-success-color, #1e8e3e);
+}
+
+.status-fail {
+    background: var(--typo3-state-danger-bg, #fce8e6);
+    color: var(--typo3-state-danger-color, #d93025);
+}
+
+.alice-filename {
+    flex-grow: 1;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--alice-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.alice-chevron {
+    color: var(--alice-text-light);
+    margin-left: 1rem;
+    transition: transform 0.3s ease;
+}
+
+.alice-image-accordion[open] .alice-chevron {
+    transform: rotate(180deg);
+}
+
+.alice-accordion-content {
+    padding: 1rem 1rem 1rem 3.5rem;
+    background: var(--alice-accent-bg);
+    border-radius: 0 0 4px 4px;
+    font-size: 0.85rem;
+    border-left: 3px solid var(--alice-border);
+    color: var(--alice-text-light);
+}
+
+.alice-image-detail {
+    margin-bottom: 0.4rem;
+    display: flex;
+}
+
+.alice-image-detail strong {
+    width: 140px;
+    color: var(--alice-text);
+    flex-shrink: 0;
+}
+
+.alice-image-detail small {
+    word-break: break-all;
+    color: var(--alice-text-light);
+}
+
+/* Loader Overlay - Matches TYPO3 Modal Backdrop */
+.alice-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(2px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.alice-loader-content {
+    background: var(--alice-card-bg);
+    padding: 2rem;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--alice-border);
+}
+
+.alice-loader-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    color: var(--alice-text);
+}
+
+.alice-close-btn {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--alice-text-light);
+    cursor: pointer;
+}
+
+.alice-progress-list {
+    list-style: none;
+    padding: 0;
+}
+
+.alice-progress-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid var(--alice-border);
+    color: var(--alice-text-light);
+}
+
+.alice-progress-item.step-active {
+    color: var(--typo3-state-info-color-variant, #007bff);
+    font-weight: 600;
+}
+
+.alice-progress-item.step-done {
+    color: var(--alice-success);
+}
+
+.alice-progress-item.step-error {
+    color: var(--alice-danger);
+}
+
+.alice-progress-item i {
+    width: 20px;
+    text-align: center;
+    font-size: 1.1rem;
+}
+
+.alice-error-message {
+    margin-top: 1.5rem;
+    color: var(--alice-danger);
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+#alice-analyzer-iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1280px;
+    height: 900px;
+    opacity: 0.01;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Alerts */
+.alice-alert {
+    padding: 0.8rem 1.2rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    border: 1px solid var(--alice-border);
+}
+
+.alice-alert-warning {
+    background: var(--typo3-state-warning-bg, #fff8e1);
+    color: var(--typo3-state-warning-color, #ffa000);
+    border-color: var(--typo3-state-warning-border-color, #ffe082);
+}
+
+.alice-settings-container {
+    max-width: 800px;
+}
+
+.alice-intro {
+    color: var(--alice-text-light);
+    margin-bottom: 2rem;
+    font-size: 0.95rem;
+}
+
+.settings-section {
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--alice-border);
+}
+
+.settings-section:last-of-type {
+    border-bottom: none;
+}
+
+.settings-section h3 {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    color: var(--alice-primary);
+}
+
+.settings-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+
+.settings-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    &.full-width {
+        grid-column: span 3;
+    }
+
+    &.checkbox-field {
+        flex-direction: row;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.5rem 0;
+    }
+
+    label {
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: var(--alice-text-light);
+    }
+
+    input,
+    textarea {
+        background: var(--alice-bg);
+        border: 1px solid var(--alice-border);
+        color: var(--alice-text);
+        padding: 0.6rem;
+        border-radius: 4px;
+        font-family: inherit;
+
+        &:focus {
+            border-color: var(--alice-primary);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
+        }
+    }
+}
+
+.settings-field.full-width {
+    grid-column: span 3;
+}
+
+.settings-actions {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.alice-alert-success {
+    background: var(--typo3-state-success-bg);
+    color: var(--typo3-state-success-color);
+    border-color: var(--typo3-state-success-border-color);
+    margin-bottom: 1.5rem;
+}
+
+/* SEO Audit Styles */
+.alice-audit-divider {
+    padding: 1rem 0.5rem 0.5rem 0;
+    margin-top: 1rem;
+    border-top: 1px solid var(--alice-border);
+    font-size: 0.85rem;
+    color: var(--alice-text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.alice-audit-info-item {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.4rem 0.5rem;
+    font-size: 0.9rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+
+    .alice-meta-name {
+        font-weight: 600;
+        color: var(--alice-text);
+        min-width: 100px;
+        flex-shrink: 0;
+    }
+
+    .alice-meta-content {
+        color: var(--alice-text-light);
+        word-break: break-all;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+.alice-empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--alice-text-light);
+
+    i {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+    }
+}

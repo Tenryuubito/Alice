@@ -1,0 +1,240 @@
+<f:layout name="Backend" />
+
+<f:section name="Content">
+    <div class="module-alice">
+        <div class="alice-header">
+            <h1><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:header.title" /></h1>
+            <div class="alice-controls">
+                <f:if condition="{analysis}">
+                    <div class="alice-last-audit">
+                        <f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.last_audit" arguments="{0: '{analysis.tstamp -> f:format.date(format: \'d.m.Y H:i\')}'}" />
+                    </div>
+                </f:if>
+
+                <f:if condition="{siteFound}">
+                    <f:then>
+                        <button id="start-audit-btn" class="btn-alice-audit" 
+                                data-page-id="{pageId}"
+                                data-audit-runner-uri="{f:uri.resource(path: 'Build/JavaScript/AuditRunner.js')}">
+                            <i class="fa fa-bolt"></i> <f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:button.start_audit" />
+                        </button>
+                    </f:then>
+                    <f:else>
+                        <div class="alice-alert alice-alert-warning">
+                            <i class="fa fa-exclamation-triangle"></i> <f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:error.no_site_found" />
+                        </div>
+                    </f:else>
+                </f:if>
+            </div>
+        </div>
+
+        <div id="alice-results-container" class="{f:if(condition: '{analysis} && !{isSiteRoot}', else: 'hidden')}"
+             data-analyze-uri="{analyzeUri}"
+             data-labels-good="{f:translate(key: 'LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:status.good')}"
+             data-labels-med="{f:translate(key: 'LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:status.med')}"
+             data-labels-poor="{f:translate(key: 'LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:status.poor')}"
+             data-labels-ok="{f:translate(key: 'LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:audit.seo_ok')}"
+             data-labels-measuring="{f:translate(key: 'LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:status.measuring')}"
+             data-labels-waiting="{f:translate(key: 'LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:status.waiting_interaction')}"
+             data-labels-captured="{f:translate(key: 'LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:status.captured')}"
+             data-labels-alt="{f:translate(key: 'LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.alt')}"
+             data-labels-dimensions="{f:translate(key: 'LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.dimensions')}"
+             data-labels-unset="{f:translate(key: 'LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.unset')}"
+             data-labels-loading="{f:translate(key: 'LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.loading')}"
+             data-labels-loading-eager="{f:translate(key: 'LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.loading_eager')}"
+             data-labels-loading-lazy="{f:translate(key: 'LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.loading_lazy')}"
+             data-labels-path="{f:translate(key: 'LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.path')}"
+             data-error-timeout="{f:translate(key: 'LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:error.timeout')}"
+             data-error-access="{f:translate(key: 'LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:error.access_denied')}"
+             data-error-network="{f:translate(key: 'LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:error.network')}"
+             data-error-selection="{f:translate(key: 'LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:error.selection')}"
+             data-error-route="{f:translate(key: 'LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:error.route_missing')}"
+             data-error-unknown="{f:translate(key: 'LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:error.unknown_server')}"
+             data-labels-inventory="{f:translate(key: 'LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.meta_inventory')}"
+             data-seo-missing-title="{f:translate(key: 'LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:error.missing_title')}"
+             data-seo-missing-description="{f:translate(key: 'LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:error.missing_description')}"
+             data-seo-missing-keywords="{f:translate(key: 'LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:error.missing_keywords')}"
+             data-seo-missing-robots="{f:translate(key: 'LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:error.missing_robots')}">
+            
+            <div class="alice-grid">
+                <!-- LCP Card -->
+                <div id="lcp-card" class="alice-card vital-card">
+                    <div class="vital-label"><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:vital.lcp" /></div>
+                    <div id="lcp-value" class="vital-value"><f:format.number decimals="2">{analysis.lcp}</f:format.number>s</div>
+                    <div id="lcp-status" class="vital-status"></div>
+                    <div class="vital-target"><f:format.raw><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:vital.target" arguments="{0: '< 2.5s'}" /></f:format.raw></div>
+                </div>
+
+                <!-- CLS Card -->
+                <div id="cls-card" class="alice-card vital-card">
+                    <div class="vital-label"><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:vital.cls" /></div>
+                    <div id="cls-value" class="vital-value"><f:format.number decimals="3">{analysis.cls}</f:format.number></div>
+                    <div id="cls-status" class="vital-status"></div>
+                    <div class="vital-target"><f:format.raw><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:vital.target" arguments="{0: '< 0.1'}" /></f:format.raw></div>
+                </div>
+
+                <!-- INP Card -->
+                <div id="inp-card" class="alice-card vital-card">
+                    <div class="vital-label"><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:vital.inp" /></div>
+                    <div id="inp-value" class="vital-value"><f:format.number decimals="0">{analysis.inp}</f:format.number>ms</div>
+                    <div id="inp-status" class="vital-status"></div>
+                    <div class="vital-target"><f:format.raw><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:vital.target" arguments="{0: '< 200ms'}" /></f:format.raw></div>
+                </div>
+            </div>
+
+            <div class="alice-details-grid">
+                <div class="alice-card">
+                    <h3><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:audit.images" /></h3>
+                    <ul id="image-audit-list" class="alice-audit-list">
+                        <f:for each="{analysis.results.images}" as="image">
+                            <li class="alice-audit-item">
+                                <details class="alice-image-accordion">
+                                    <summary>
+                                        <span class="alice-status-icon {f:if(condition: image.issue, then: 'status-fail', else: 'status-ok')}">
+                                            {f:if(condition: image.issue, then: '✘', else: '✔')}
+                                        </span>
+                                        <span class="alice-filename">{image.filename}</span>
+                                        <i class="fa fa-angle-down alice-chevron"></i>
+                                    </summary>
+                                    <div class="alice-accordion-content">
+                                        <div class="alice-image-detail"><strong><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.alt" />:</strong> {f:if(condition: image.alt, then: image.alt, else: '---')}</div>
+                                        <div class="alice-image-detail"><strong><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.dimensions" />:</strong> {f:if(condition: image.width, then: '{image.width}x{image.height}', else: '{f:translate(key: \'LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.unset\')}')}</div>
+                                        <div class="alice-image-detail"><strong><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.loading" />:</strong> 
+                                            <f:switch expression="{image.loading}">
+                                                <f:case value="eager"><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.loading_eager" /></f:case>
+                                                <f:case value="lazy"><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.loading_lazy" /></f:case>
+                                                <f:defaultCase>{image.loading}</f:defaultCase>
+                                            </f:switch>
+                                        </div>
+                                        <div class="alice-image-detail"><strong><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.path" />:</strong> <small>{image.src}</small></div>
+                                    </div>
+                                </details>
+                            </li>
+                        </f:for>
+                    </ul>
+                </div>
+                <div class="alice-card">
+                    <h3><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:audit.seo" /></h3>
+                    <ul id="seo-audit-list" class="alice-audit-list">
+                        <!-- Issues -->
+                        <f:for each="{analysis.results.seo.issues}" as="issueKey">
+                            <li class="alice-audit-item">
+                                <span class="alice-status-icon status-fail">✘</span> <f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:{issueKey}" />
+                            </li>
+                        </f:for>
+                        <f:if condition="{analysis.results.seo.issues -> f:count()} == 0">
+                            <li class="alice-audit-item">
+                                <span class="alice-status-icon status-ok">✔</span> <f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:audit.seo_ok" />
+                            </li>
+                        </f:if>
+
+                        <!-- Inventory -->
+                        <f:if condition="{analysis.results.seo.inventory}">
+                            <li class="alice-audit-divider">
+                                <strong><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.meta_inventory" /></strong>
+                            </li>
+                            <f:for each="{analysis.results.seo.inventory}" as="meta">
+                                <li class="alice-audit-info-item">
+                                    <span class="alice-meta-name">{meta.name}:</span>
+                                    <span class="alice-meta-content">{meta.content -> f:format.crop(maxCharacters: 50)}</span>
+                                </li>
+                            </f:for>
+                        </f:if>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="no-analysis-message" class="{f:if(condition: '{analysis} || {isSiteRoot}', then: 'hidden')}">
+            <div class="alice-empty-state">
+                <i class="fa fa-line-chart"></i>
+                <p><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.no_data" /></p>
+            </div>
+        </div>
+
+        <!-- Site Configuration View -->
+        <f:if condition="{isSiteRoot}">
+            <div class="alice-settings-container">
+                <div class="alice-card">
+                    <h2><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:settings.title" /></h2>
+                    <p class="alice-intro"><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:settings.intro" /></p>
+                    
+                    <form action="{f:uri.action(action: 'saveSettings')}" method="POST">
+                        <input type="hidden" name="id" value="{pageId}" />
+                        
+                        <div class="settings-section">
+                            <h3><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:settings.section.thresholds" /></h3>
+                            <div class="settings-row">
+                                <div class="settings-field">
+                                    <label>LCP (s)</label>
+                                    <input type="text" name="settings[thresholds][lcp]" value="{settings.thresholds.lcp}" class="form-control" />
+                                </div>
+                                <div class="settings-field">
+                                    <label>CLS</label>
+                                    <input type="text" name="settings[thresholds][cls]" value="{settings.thresholds.cls}" class="form-control" />
+                                </div>
+                                <div class="settings-field">
+                                    <label>INP (ms)</label>
+                                    <input type="text" name="settings[thresholds][inp]" value="{settings.thresholds.inp}" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="settings-section">
+                            <h3><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:settings.section.audit_rules" /></h3>
+                            <div class="settings-field checkbox-field">
+                                <label class="alice-switch" for="auto-lazyloading">
+                                    <input type="checkbox" name="settings[auto_lazyloading]" value="1" {f:if(condition: settings.auto_lazyloading, then: 'checked')} id="auto-lazyloading" />
+                                    <span class="alice-switch-slider"></span>
+                                </label>
+                                <label for="auto-lazyloading" class="alice-switch-label">
+                                    <f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:settings.label.auto_lazyloading" />
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="settings-actions">
+                            <button type="submit" class="btn-alice-audit">
+                                <f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:settings.button.save" />
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </f:if>
+
+        <!-- Loader Overlay -->
+        <div id="alice-loader" class="alice-overlay" style="display: none;">
+            <div class="alice-loader-content">
+                <div class="alice-loader-header">
+                    <h2><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:header.title" /></h2>
+                    <button id="alice-close-loader-btn" class="alice-close-btn">&times;</button>
+                </div>
+                <ul class="alice-progress-list">
+                    <li id="step-iframe" class="alice-progress-item step-pending">
+                        <i class="fa fa-circle-o"></i> <span><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:loader.step_iframe" /></span> <span class="step-status"></span>
+                    </li>
+                    <li id="step-script" class="alice-progress-item step-pending">
+                        <i class="fa fa-circle-o"></i> <span><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:loader.step_script" /></span> <span class="step-status"></span>
+                    </li>
+                    <li id="step-lcp" class="alice-progress-item step-pending">
+                        <i class="fa fa-circle-o"></i> <span><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:vital.lcp" /></span> <span class="step-status"></span>
+                    </li>
+                    <li id="step-cls" class="alice-progress-item step-pending">
+                        <i class="fa fa-circle-o"></i> <span><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:vital.cls" /></span> <span class="step-status"></span>
+                    </li>
+                    <li id="step-inp" class="alice-progress-item step-pending">
+                        <i class="fa fa-circle-o"></i> <span><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:vital.inp" /></span> <span class="step-status"></span>
+                    </li>
+                    <li id="step-sync" class="alice-progress-item step-pending">
+                        <i class="fa fa-circle-o"></i> <span><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:loader.step_sync" /></span> <span class="step-status"></span>
+                    </li>
+                </ul>
+                <div id="alice-error-text" class="alice-error-message"></div>
+            </div>
+        </div>
+
+        <!-- Background measurement iframe -->
+        <iframe id="alice-analyzer-iframe" src="about:blank"></iframe>
+    </div>
+</f:section>

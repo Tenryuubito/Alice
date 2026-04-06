@@ -1,0 +1,9 @@
+{
+    "publicPath": "/var/www/html/web/public",
+    "projectPath": "/var/www/html/web",
+    "entries": {
+        "packages/alice/Resources/Public/Build/JavaScript/Backend": "/var/www/html/web/vendor/tenryuubito/alice/Resources/Private/TypeScript/Backend.ts",
+        "packages/alice/Resources/Public/Build/JavaScript/AuditRunner": "/var/www/html/web/vendor/tenryuubito/alice/Resources/Private/TypeScript/AuditRunner.ts",
+        "vendor/tenryuubito/nelius/Resources/Public/Build/JavaScript/main": "/var/www/html/web/vendor/tenryuubito/nelius/Resources/Private/TypeScript/main.ts"
+    }
+}

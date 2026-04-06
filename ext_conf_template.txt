@@ -1,0 +1,11 @@
+# [<f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:settings.section.thresholds" />]
+# cat=Thresholds; type=string; label=LCP Target Value (Seconds)
+lcp = 2.5
+# cat=Thresholds; type=string; label=CLS Target Value
+cls = 0.1
+# cat=Thresholds; type=string; label=INP Target Value (ms)
+inp = 200
+
+# [<f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:settings.section.audit_rules" />]
+# cat=Audit; type=boolean; label=Enable Automatic LazyLoading globally
+auto_lazyloading = 1

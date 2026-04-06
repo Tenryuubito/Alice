@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+	<file source-language="en" target-language="de" datatype="plaintext" original="EXT:alice/Resources/Private/Language/locallang_mod.xlf" date="2026-04-05T18:13:00Z" product-name="alice">
+		<header/>
+		<body>
+			<trans-unit id="mlang_tabs_tab" resname="mlang_tabs_tab">
+				<source>Performance &amp; Analytics</source>
+				<target>Performance &amp; Analyse</target>
+			</trans-unit>
+			<trans-unit id="mlang_labels_tabdescr" resname="mlang_labels_tabdescr">
+				<source>Performance monitoring and analytics dashboard for the Nelius relaunch.</source>
+				<target>Dashboard zur Performance-Überwachung und Analyse für den Nelius Relaunch.</target>
+			</trans-unit>
+			<trans-unit id="mlang_labels_tablabel" resname="mlang_labels_tablabel">
+				<source>Performance &amp; Analytics</source>
+				<target>Performance &amp; Analyse</target>
+			</trans-unit>
+
+			<!-- Module Headings & Buttons -->
+			<trans-unit id="header.title" resname="header.title">
+				<source>Performance &amp; Analytics Audit</source>
+				<target>Performance &amp; Analyse Audit</target>
+			</trans-unit>
+			<trans-unit id="button.start_audit" resname="button.start_audit">
+				<source>Start Analysis (LCP, CLS, INP)</source>
+				<target>Analyse starten</target>
+			</trans-unit>
+			<trans-unit id="label.last_audit" resname="label.last_audit">
+				<source>Last Audit: %s</source>
+				<target>Letztes Audit: %s</target>
+			</trans-unit>
+			<trans-unit id="label.no_data" resname="label.no_data">
+				<source>No Core Web Vitals data found for this page. Click "Start Analysis" to measure LCP, CLS, and INP.</source>
+				<target>Keine Core Web Vitals Daten für diese Seite gefunden. Klicken Sie auf "Analyse starten", um LCP, CLS und INP zu messen.</target>
+			</trans-unit>
+
+			<!-- Vitals Labels -->
+			<trans-unit id="vital.lcp" resname="vital.lcp">
+				<source>Largest Contentful Paint (LCP)</source>
+				<target>Largest Contentful Paint (LCP)</target>
+			</trans-unit>
+			<trans-unit id="vital.cls" resname="vital.cls">
+				<source>Cumulative Layout Shift (CLS)</source>
+				<target>Cumulative Layout Shift (CLS)</target>
+			</trans-unit>
+			<trans-unit id="vital.inp" resname="vital.inp">
+				<source>Interaction to Next Paint (INP)</source>
+				<target>Interaction to Next Paint (INP)</target>
+			</trans-unit>
+			<trans-unit id="vital.target" resname="vital.target">
+				<source>Target: %s</source>
+				<target>Zielwert: %s</target>
+			</trans-unit>
+			<trans-unit id="vital.calculating" resname="vital.calculating">
+				<source>Calculating...</source>
+				<target>Berechnung läuft...</target>
+			</trans-unit>
+
+			<!-- Status Labels -->
+			<trans-unit id="status.good" resname="status.good">
+				<source>Good</source>
+				<target>Gut</target>
+			</trans-unit>
+			<trans-unit id="status.med" resname="status.med">
+				<source>Needs Improvement</source>
+				<target>Verbesserungswürdig</target>
+			</trans-unit>
+			<trans-unit id="status.poor" resname="status.poor">
+				<source>Poor</source>
+				<target>Schlecht</target>
+			</trans-unit>
+
+			<!-- Progress Steps -->
+			<trans-unit id="progress.initializing" resname="progress.initializing">
+				<source>Initializing Page &amp; Layout</source>
+				<target>Seite &amp; Layout werden initialisiert</target>
+			</trans-unit>
+			<trans-unit id="progress.measuring_lcp" resname="progress.measuring_lcp">
+				<source>Capturing Largest Paint (LCP)</source>
+				<target>LCP-Messwert wird erfasst</target>
+			</trans-unit>
+			<trans-unit id="progress.measuring_cls" resname="progress.measuring_cls">
+				<source>Analyzing Layout Stability (CLS)</source>
+				<target>Layout-Stabilität wird analysiert (CLS)</target>
+			</trans-unit>
+			<trans-unit id="progress.interacting" resname="progress.interacting">
+				<source>Simulating Interaction</source>
+				<target>Interaktion wird simuliert</target>
+			</trans-unit>
+			<trans-unit id="progress.measuring_inp" resname="progress.measuring_inp">
+				<source>Measuring Responsiveness (INP)</source>
+				<target>Reaktionsfähigkeit wird gemessen (INP)</target>
+			</trans-unit>
+			<trans-unit id="progress.syncing" resname="progress.syncing">
+				<source>Syncing Results</source>
+				<target>Ergebnisse werden synchronisiert</target>
+			</trans-unit>
+			<trans-unit id="loader.step_iframe" resname="loader.step_iframe">
+				<source>Loading Website (Iframe)</source>
+				<target>Website wird geladen (Iframe)</target>
+			</trans-unit>
+			<trans-unit id="loader.step_script" resname="loader.step_script">
+				<source>Injecting Audit Engine</source>
+				<target>Analyse-Engine wird injiziert</target>
+			</trans-unit>
+			<trans-unit id="loader.step_sync" resname="loader.step_sync">
+				<source>Finalizing Performance Sync</source>
+				<target>Performance-Synchronisierung wird abgeschlossen</target>
+			</trans-unit>
+
+			<!-- Image Audit Labels -->
+			<trans-unit id="label.alt" resname="label.alt">
+				<source>Alt</source>
+				<target>Alt</target>
+			</trans-unit>
+			<trans-unit id="label.dimensions" resname="label.dimensions">
+				<source>Dimensions</source>
+				<target>Dimensionen</target>
+			</trans-unit>
+			<trans-unit id="label.unset" resname="label.unset">
+				<source>Unset</source>
+				<target>Nicht gesetzt</target>
+			</trans-unit>
+			<trans-unit id="label.loading" resname="label.loading">
+				<source>Loading</source>
+				<target>Ladeverhalten</target>
+			</trans-unit>
+			<trans-unit id="label.path" resname="label.path">
+				<source>Path</source>
+				<target>Pfad</target>
+			</trans-unit>
+			<trans-unit id="label.loading_eager" resname="label.loading_eager">
+				<source>eager</source>
+				<target>sofort (eager)</target>
+			</trans-unit>
+			<trans-unit id="label.loading_lazy" resname="label.loading_lazy">
+				<source>verzögert (lazy)</source>
+				<target>verzögert (lazy)</target>
+			</trans-unit>
+
+			<!-- Dynamic Status Texts -->
+			<trans-unit id="status.measuring" resname="status.measuring">
+				<source>Measuring...</source>
+				<target>Messung läuft...</target>
+			</trans-unit>
+			<trans-unit id="status.waiting_interaction" resname="status.waiting_interaction">
+				<source>Waiting for Interaction...</source>
+				<target>Warten auf Interaktion...</target>
+			</trans-unit>
+			<trans-unit id="status.captured" resname="status.captured">
+				<source>Captured: %s</source>
+				<target>Erfasst: %s</target>
+			</trans-unit>
+
+			<!-- Settings UI -->
+			<trans-unit id="settings.title" resname="settings.title">
+				<source>Site Configuration</source>
+				<target>Site-Konfiguration</target>
+			</trans-unit>
+			<trans-unit id="settings.intro" resname="settings.intro">
+				<source>You are on a Site Root. Use this view to configure global performance thresholds and audit rules for this site.</source>
+				<target>Sie befinden sich auf einem Site-Root. Nutzen Sie diese Ansicht, um globale Performance-Grenzwerte und Audit-Regeln für diese Site zu konfigurieren.</target>
+			</trans-unit>
+			<trans-unit id="settings.section.thresholds" resname="settings.section.thresholds">
+				<source>Performance Thresholds (Core Web Vitals)</source>
+				<target>Performance-Grenzwerte (Core Web Vitals)</target>
+			</trans-unit>
+			<trans-unit id="settings.section.audit_rules" resname="settings.section.audit_rules">
+				<source>Audit Rules &amp; Exclusions</source>
+				<target>Audit-Regeln &amp; Ausschlüsse</target>
+			</trans-unit>
+			<trans-unit id="settings.label.ignored_assets" resname="settings.label.ignored_assets">
+				<source>Ignored Assets (Filename patterns, one per line)</source>
+				<target>Ignorierte Assets (Dateinamensmuster, eines pro Zeile)</target>
+			</trans-unit>
+			<trans-unit id="settings.label.auto_lazyloading" resname="settings.label.auto_lazyloading">
+				<source>Enable Automatic LazyLoading for all images</source>
+				<target>Automatisches LazyLoading für alle Bilder aktivieren</target>
+			</trans-unit>
+			<trans-unit id="settings.button.save" resname="settings.button.save">
+				<source>Save Configuration</source>
+				<target>Konfiguration speichern</target>
+			</trans-unit>
+			<trans-unit id="settings.success" resname="settings.success">
+				<source>Configuration saved successfully.</source>
+				<target>Konfiguration erfolgreich gespeichert.</target>
+			</trans-unit>
+
+			<!-- SEO Issues -->
+			<trans-unit id="error.missing_title" resname="error.missing_title">
+				<source>Missing meta title</source>
+				<target>Meta-Title fehlt</target>
+			</trans-unit>
+			<trans-unit id="error.missing_description" resname="error.missing_description">
+				<source>Missing meta description</source>
+				<target>Meta-Description fehlt</target>
+			</trans-unit>
+			<trans-unit id="error.missing_keywords" resname="error.missing_keywords">
+				<source>Missing meta keywords</source>
+				<target>Meta-Keywords fehlen</target>
+			</trans-unit>
+			<trans-unit id="error.missing_robots" resname="error.missing_robots">
+				<source>Missing meta robots</source>
+				<target>Meta-Robots fehlen</target>
+			</trans-unit>
+			<trans-unit id="label.meta_inventory" resname="label.meta_inventory">
+				<source>Metadata Inventory</source>
+				<target>Status Übersicht Metadaten</target>
+			</trans-unit>
+
+			<!-- Audit Details -->
+			<trans-unit id="audit.images" resname="audit.images">
+				<source>Images</source>
+				<target>Bilder</target>
+			</trans-unit>
+			<trans-unit id="audit.seo" resname="audit.seo">
+				<source>SEO Checks</source>
+				<target>SEO Checks</target>
+			</trans-unit>
+			<trans-unit id="audit.seo_ok" resname="audit.seo_ok">
+				<source>Basic SEO OK</source>
+				<target>Basis-SEO OK</target>
+			</trans-unit>
+
+			<!-- Error & Warning Messages -->
+			<trans-unit id="error.no_page_id" resname="error.no_page_id">
+				<source>Please select a page first.</source>
+				<target>Bitte wählen Sie zuerst eine Seite aus.</target>
+			</trans-unit>
+			<trans-unit id="error.no_site_found" resname="error.no_site_found">
+				<source>No Site Configuration found for this page.</source>
+				<target>Keine Site-Konfiguration für diese Seite gefunden.</target>
+			</trans-unit>
+			<trans-unit id="error.selection" resname="error.selection">
+				<source>Selection Error.</source>
+				<target>Auswahlfehler.</target>
+			</trans-unit>
+			<trans-unit id="error.route_missing" resname="error.route_missing">
+				<source>Route Error: Missing Analyze URI</source>
+				<target>Routen-Fehler: Analyse-URI fehlt</target>
+			</trans-unit>
+			<trans-unit id="error.unknown_server" resname="error.unknown_server">
+				<source>Unknown Server Error</source>
+				<target>Unbekannter Server-Fehler</target>
+			</trans-unit>
+			<trans-unit id="error.analysis_failed" resname="error.analysis_failed">
+				<source>Analysis failed. Check console for details.</source>
+				<target>Analyse fehlgeschlagen. Details finden Sie in der Konsole.</target>
+			</trans-unit>
+			<trans-unit id="error.timeout" resname="error.timeout">
+				<source>Audit took too long; showing partial results. Some metrics (like INP) might be missing.</source>
+				<target>Das Audit hat zu lange gedauert; es werden Teil-Ergebnisse angezeigt. Einige Metriken (wie INP) könnten fehlen.</target>
+			</trans-unit>
+			<trans-unit id="error.access_denied" resname="error.access_denied">
+				<source>Could not access the page (CSP or Cross-Origin restriction). Ensure the page allows script injection.</source>
+				<target>Zugriff auf die Seite verweigert (CSP oder Cross-Origin Restriktion). Bitte stellen Sie sicher, dass die Seite Skript-Injektionen erlaubt.</target>
+			</trans-unit>
+			<trans-unit id="error.network" resname="error.network">
+				<source>Unable to synchronize results with the server. Please check your connection.</source>
+				<target>Synchronisierung mit dem Server fehlgeschlagen. Bitte prüfen Sie Ihre Verbindung.</target>
+			</trans-unit>
+			<trans-unit id="button.close" resname="button.close">
+				<source>Close</source>
+				<target>Schließen</target>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

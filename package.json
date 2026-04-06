@@ -1,0 +1,20 @@
+{
+  "name": "alice-build",
+  "private": true,
+  "type": "module",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "php ../../vendor/bin/typo3 cache:flush && php ../../vendor/bin/typo3 alice:export-vite-config -f && vite",
+    "build": "php ../../vendor/bin/typo3 alice:export-vite-config && vite build",
+    "watch": "npm run dev"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.20",
+    "sass": "^1.71.0",
+    "typescript": "^5.3.3",
+    "vite": "^5.1.4"
+  },
+  "dependencies": {
+    "web-vitals": "^5.2.0"
+  }
+}
