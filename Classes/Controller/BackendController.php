@@ -148,6 +148,7 @@ class BackendController extends ActionController
         $settings['thresholds']['cls'] = (float)($settings['cls'] ?? 0.1);
         $settings['thresholds']['inp'] = (float)($settings['inp'] ?? 200);
         $settings['autoLazyLoading'] = (bool)($settings['auto_lazyloading'] ?? false);
+        $settings['openaiApiKey'] = (string)($settings['openai_api_key'] ?? '');
         $moduleTemplate->assign('settings', $settings);
 
         $uriBuilder = $this->uriBuilder->reset();
@@ -252,6 +253,7 @@ class BackendController extends ActionController
         $current['cls'] = (float)$settings['cls'];
         $current['inp'] = (int)$settings['inp'];
         $current['auto_lazyloading'] = (bool)($settings['autoLazyLoading'] ?? false);
+        $current['openai_api_key'] = (string)($settings['openaiApiKey'] ?? '');
 
         $config->set('alice', $current);
 

@@ -52,6 +52,23 @@
                 </div>
             </div>
 
+            <!-- AI Configuration Section -->
+            <div class="alice-settings-section">
+                <h3>
+                    <f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:settings.section.ai" />
+                </h3>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="alice-form-group">
+                            <label for="openai-api-key">
+                                <f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:settings.label.openai_api_key" />
+                            </label>
+                            <f:form.textfield property="openaiApiKey" id="openai-api-key" class="form-control" value="{settings.openaiApiKey}" placeholder="sk-..." />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="alice-form-actions">
                 <f:form.submit
                     value="{f:translate(key: 'LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:settings.button.save')}"
