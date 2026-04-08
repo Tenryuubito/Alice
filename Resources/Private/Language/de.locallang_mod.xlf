@@ -197,6 +197,14 @@
 				<source>Problem Overview</source>
 				<target>Problem-Übersicht</target>
 			</trans-unit>
+			<trans-unit id="settings.section.ai" resname="settings.section.ai">
+				<source>AI Performance Assistance</source>
+				<target>KI-Performance-Unterstützung</target>
+			</trans-unit>
+			<trans-unit id="settings.label.openai_api_key" resname="settings.label.openai_api_key">
+				<source>OpenAI API Key</source>
+				<target>OpenAI API-Schlüssel</target>
+			</trans-unit>
 			
 			<!-- Global Audit Labels -->
 			<trans-unit id="label.status" resname="label.status">

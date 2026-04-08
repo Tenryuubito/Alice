@@ -146,6 +146,12 @@
 			<trans-unit id="label.problem_overview" resname="label.problem_overview">
 				<source>Problem Overview</source>
 			</trans-unit>
+			<trans-unit id="settings.section.ai" resname="settings.section.ai">
+				<source>AI Performance Assistance</source>
+			</trans-unit>
+			<trans-unit id="settings.label.openai_api_key" resname="settings.label.openai_api_key">
+				<source>OpenAI API Key</source>
+			</trans-unit>
 
 			<!-- Global Audit Labels -->
 			<trans-unit id="label.status" resname="label.status">

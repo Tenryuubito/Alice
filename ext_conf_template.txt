@@ -9,3 +9,7 @@ inp = 200
 # [<f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:settings.section.audit_rules" />]
 # cat=Audit; type=boolean; label=Enable Automatic LazyLoading globally
 auto_lazyloading = 1
+
+# [<f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:settings.section.ai" />]
+# cat=AI; type=string; label=LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:settings.label.openai_api_key
+openai_api_key =
