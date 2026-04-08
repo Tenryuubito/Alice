@@ -1,0 +1,29 @@
+:root {
+    /* Alice Tokens - Premium Palette */
+    --alice-primary: #3db9ff;
+    --alice-success: #2ecc71;
+    --alice-warning: #f1c40f;
+    --alice-danger: #e74c3c;
+    --alice-info: #3498db;
+
+    --alice-bg: #f4f7f6;
+    --alice-card-bg: #ffffff;
+    --alice-text: #2c3e50;
+    --alice-text-muted: #7f8c8d;
+    --alice-border: #dcdde1;
+
+    --alice-font: 'Inter', -apple-system, system-ui, sans-serif;
+    --alice-radius: 12px;
+    --alice-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --alice-bg: #0f1113;
+        --alice-card-bg: #1a1d21;
+        --alice-text: #ecf0f1;
+        --alice-text-muted: #95a5a6;
+        --alice-border: rgba(255, 255, 255, 0.08);
+        --alice-shadow: 0 15px 45px rgba(0, 0, 0, 0.4);
+    }
+}

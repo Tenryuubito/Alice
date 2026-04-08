@@ -1,0 +1,31 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<div id="alice-loader" class="alice-overlay hidden">
+    <div class="alice-loader-content">
+        <div class="alice-loader-header">
+            <h2><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:header.title" /></h2>
+            <button id="alice-close-loader-btn" class="alice-close-btn">&times;</button>
+        </div>
+        <ul class="alice-progress-list">
+            <li id="step-iframe" class="alice-progress-item step-pending">
+                <i class="alice-icon alice-icon-info"></i> <span><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:loader.step_iframe" /></span> <span class="step-status"></span>
+            </li>
+            <li id="step-script" class="alice-progress-item step-pending">
+                <i class="alice-icon alice-icon-code"></i> <span><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:loader.step_script" /></span> <span class="step-status"></span>
+            </li>
+            <li id="step-lcp" class="alice-progress-item step-pending">
+                <i class="alice-icon alice-icon-bolt"></i> <span><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:vital.lcp" /></span> <span class="step-status"></span>
+            </li>
+            <li id="step-cls" class="alice-progress-item step-pending">
+                <i class="alice-icon alice-icon-chart"></i> <span><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:vital.cls" /></span> <span class="step-status"></span>
+            </li>
+            <li id="step-inp" class="alice-progress-item step-pending">
+                <i class="alice-icon alice-icon-settings"></i> <span><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:vital.inp" /></span> <span class="step-status"></span>
+            </li>
+            <li id="step-sync" class="alice-progress-item step-pending">
+                <i class="alice-icon alice-icon-flag"></i> <span><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:loader.step_sync" /></span> <span class="step-status"></span>
+            </li>
+        </ul>
+        <div id="alice-error-text" class="alice-error-message"></div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,101 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<div class="alice-details-grid">
+    <!-- Image Audit -->
+    <div class="alice-card">
+        <h3><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:audit.images" /></h3>
+        <ul id="image-audit-list" class="audit-results-list">
+            <f:for each="{analysis.results.images}" as="image">
+                <li class="alice-audit-item">
+                    <details class="alice-image-accordion">
+                        <summary>
+                            <span class="status-icon {f:if(condition: image.issue, then: 'status-err', else: 'status-ok')}">
+                                {f:if(condition: image.issue, then: '✘', else: '✔')}
+                            </span>
+                            <span class="alice-filename">{image.filename}</span>
+                            <i class="alice-icon alice-icon-chevron-down alice-chevron"></i>
+                        </summary>
+                        <div class="alice-accordion-content">
+                            <div class="alice-image-detail"><strong><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.alt" />:</strong> {f:if(condition: image.alt, then: image.alt, else: '---')}</div>
+                            <div class="alice-image-detail"><strong><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.dimensions" />:</strong> {f:if(condition: image.width, then: '{image.width}x{image.height}', else: '{f:translate(key: \'LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.unset\')}')}</div>
+                            <div class="alice-image-detail"><strong><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.loading" />:</strong> 
+                                <f:switch expression="{image.loading}">
+                                    <f:case value="eager"><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.loading_eager" /></f:case>
+                                    <f:case value="lazy"><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.loading_lazy" /></f:case>
+                                    <f:defaultCase>{image.loading}</f:defaultCase>
+                                </f:switch>
+                            </div>
+                            <div class="alice-image-detail"><strong><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.path" />:</strong> <small>{image.src}</small></div>
+                        </div>
+                    </details>
+                </li>
+            </f:for>
+        </ul>
+    </div>
+
+    <!-- SEO Audit -->
+    <div class="alice-card">
+        <h3><i class="alice-icon alice-icon-search"></i> <f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:audit.seo" /></h3>
+        <ul id="seo-audit-list" class="audit-results-list">
+            <f:for each="{analysis.results.seo.issues}" as="issueKey">
+                <li>
+                    <span class="status-icon status-err">✘</span>
+                    <div class="result-text">
+                        <f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:{issueKey}" />
+                    </div>
+                </li>
+            </f:for>
+            <f:if condition="{analysis.results.seo.issues -> f:count()} == 0">
+                <li>
+                    <span class="status-icon status-ok">✔</span>
+                    <div class="result-text">
+                        <f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:audit.seo_ok" />
+                    </div>
+                </li>
+            </f:if>
+            <f:if condition="{analysis.results.seo.inventory}">
+                <li class="audit-divider">
+                    <f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.meta_inventory" />
+                </li>
+                <f:for each="{analysis.results.seo.inventory}" as="meta">
+                    <li>
+                        <span class="status-icon status-info">ℹ</span>
+                        <div class="result-text">
+                            <strong>{meta.name}</strong>
+                            <span class="result-detail">{meta.content -> f:format.crop(maxCharacters: 80)}</span>
+                        </div>
+                    </li>
+                </f:for>
+            </f:if>
+        </ul>
+    </div>
+
+    <!-- Links Audit -->
+    <div class="alice-card">
+        <h3><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:audit.links" /></h3>
+        <ul id="link-audit-list" class="audit-results-list">
+            <f:for each="{analysis.results.links}" as="link">
+                <li class="alice-audit-item">
+                    <details class="alice-image-accordion">
+                        <summary>
+                            <span class="status-icon {f:if(condition: link.accessible, then: 'status-ok', else: 'status-err')}">
+                                {f:if(condition: link.accessible, then: '✔', else: '✘')}
+                            </span>
+                            <span class="alice-filename">{link.text -> f:format.crop(maxCharacters: 40)}</span>
+                            <span class="alice-badge {f:if(condition: link.isExternal, then: 'badge-external', else: 'badge-internal')}">
+                                {f:if(condition: link.isExternal, then: '{f:translate(key: \'LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.external\')}', else: '{f:translate(key: \'LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.internal\')}')}
+                            </span>
+                            <i class="alice-icon alice-icon-chevron-down alice-chevron"></i>
+                        </summary>
+                        <div class="alice-accordion-content">
+                            <div class="alice-link-detail"><strong>URL:</strong> <a href="{link.url}" target="_blank">{link.url}</a></div>
+                            <div class="alice-link-detail"><strong><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.text" />:</strong> {link.text}</div>
+                            <div class="alice-link-detail"><strong>Status:</strong> {link.status}</div>
+                            <div class="alice-link-detail"><strong><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.load_time" />:</strong> {link.time}ms</div>
+                        </div>
+                    </details>
+                </li>
+            </f:for>
+        </ul>
+    </div>
+</div>
+</html>

@@ -181,9 +181,55 @@
 				<source>Save Configuration</source>
 				<target>Konfiguration speichern</target>
 			</trans-unit>
+			<trans-unit id="settings.button.analyze_all" resname="settings.button.analyze_all">
+				<source>Analyze All Pages</source>
+				<target>Alle Seiten analysieren</target>
+			</trans-unit>
+			<trans-unit id="settings.label.global_progress" resname="settings.label.global_progress">
+				<source>Global Analysis Progress</source>
+				<target>Fortschritt der Gesamt-Analyse</target>
+			</trans-unit>
 			<trans-unit id="settings.success" resname="settings.success">
 				<source>Configuration saved successfully.</source>
 				<target>Konfiguration erfolgreich gespeichert.</target>
+			</trans-unit>
+			<trans-unit id="label.problem_overview" resname="label.problem_overview">
+				<source>Problem Overview</source>
+				<target>Problem-Übersicht</target>
+			</trans-unit>
+			
+			<!-- Global Audit Labels -->
+			<trans-unit id="label.status" resname="label.status">
+				<source>Status</source>
+				<target>Status</target>
+			</trans-unit>
+			<trans-unit id="label.page" resname="label.page">
+				<source>Page</source>
+				<target>Seite</target>
+			</trans-unit>
+			<trans-unit id="label.type" resname="label.type">
+				<source>Type</source>
+				<target>Typ</target>
+			</trans-unit>
+			<trans-unit id="label.source" resname="label.source">
+				<source>Source</source>
+				<target>Quelle</target>
+			</trans-unit>
+			<trans-unit id="label.problem" resname="label.problem">
+				<source>Problem</source>
+				<target>Problem</target>
+			</trans-unit>
+			<trans-unit id="status.ok_desc" resname="status.ok_desc">
+				<source>OK - Everything fits</source>
+				<target>OK - Alles passt</target>
+			</trans-unit>
+			<trans-unit id="status.warning_desc" resname="status.warning_desc">
+				<source>Warning - Suboptimal</source>
+				<target>Warnung - Unvollständig</target>
+			</trans-unit>
+			<trans-unit id="status.error_desc" resname="status.error_desc">
+				<source>Error - Broken</source>
+				<target>Fehler - Defekt</target>
 			</trans-unit>
 
 			<!-- SEO Issues -->
@@ -202,6 +248,14 @@
 			<trans-unit id="error.missing_robots" resname="error.missing_robots">
 				<source>Missing meta robots</source>
 				<target>Meta-Robots fehlen</target>
+			</trans-unit>
+			<trans-unit id="label.pages_overview" resname="label.pages_overview">
+				<source>Page Overview</source>
+				<target>Seiten-Übersicht</target>
+			</trans-unit>
+			<trans-unit id="label.last_audit_short" resname="label.last_audit_short">
+				<source>Last Audit</source>
+				<target>Letztes Audit</target>
 			</trans-unit>
 			<trans-unit id="label.meta_inventory" resname="label.meta_inventory">
 				<source>Metadata Inventory</source>

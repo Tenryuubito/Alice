@@ -134,8 +134,46 @@
 			<trans-unit id="settings.button.save" resname="settings.button.save">
 				<source>Save Configuration</source>
 			</trans-unit>
+			<trans-unit id="settings.button.analyze_all" resname="settings.button.analyze_all">
+				<source>Analyze All Pages</source>
+			</trans-unit>
+			<trans-unit id="settings.label.global_progress" resname="settings.label.global_progress">
+				<source>Global Analysis Progress</source>
+			</trans-unit>
 			<trans-unit id="settings.success" resname="settings.success">
 				<source>Configuration saved successfully.</source>
+			</trans-unit>
+			<trans-unit id="label.problem_overview" resname="label.problem_overview">
+				<source>Problem Overview</source>
+			</trans-unit>
+
+			<!-- Global Audit Labels -->
+			<trans-unit id="label.status" resname="label.status">
+				<source>Status</source>
+			</trans-unit>
+			<trans-unit id="label.pages_overview" resname="label.pages_overview">
+				<source>Seiten-Übersicht</source>
+			</trans-unit>
+			<trans-unit id="label.last_audit_short" resname="label.last_audit_short">
+				<source>Letztes Audit</source>
+			</trans-unit>
+			<trans-unit id="label.type" resname="label.type">
+				<source>Type</source>
+			</trans-unit>
+			<trans-unit id="label.source" resname="label.source">
+				<source>Source</source>
+			</trans-unit>
+			<trans-unit id="label.problem" resname="label.problem">
+				<source>Problem</source>
+			</trans-unit>
+			<trans-unit id="status.ok_desc" resname="status.ok_desc">
+				<source>OK - Everything fits</source>
+			</trans-unit>
+			<trans-unit id="status.warning_desc" resname="status.warning_desc">
+				<source>Warning - Suboptimal</source>
+			</trans-unit>
+			<trans-unit id="status.error_desc" resname="status.error_desc">
+				<source>Error - Broken</source>
 			</trans-unit>
 
 			<!-- SEO Issues -->
@@ -216,6 +254,12 @@
 			</trans-unit>
 			<trans-unit id="button.close" resname="button.close">
 				<source>Close</source>
+			</trans-unit>
+			<trans-unit id="hint.select_page" resname="hint.select_page">
+				<source>Please select a specific page or a Site Root in the page tree to begin analysis.</source>
+			</trans-unit>
+			<trans-unit id="label.pages_overview" resname="label.pages_overview">
+				<source>Seiten-Übersicht</source>
 			</trans-unit>
 		</body>
 	</file>

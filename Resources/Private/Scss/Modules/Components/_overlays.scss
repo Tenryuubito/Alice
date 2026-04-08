@@ -1,0 +1,99 @@
+/* Progress Bars & Loaders */
+.alice-progress-bar-wrapper {
+    width: 100%;
+    height: 14px;
+    background: var(--alice-accent-bg);
+    border-radius: 7px;
+    overflow: hidden;
+    margin: 1.5rem 0;
+    border: 1px solid var(--alice-border);
+}
+
+.alice-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #007bff, #4facfe);
+    transition: width 0.4s ease;
+}
+
+.alice-progress-text {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--alice-text);
+    text-align: right;
+}
+
+/* Modal Overlay & Process Stepper */
+.alice-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+}
+
+.alice-loader-content {
+    background: var(--alice-card-bg);
+    padding: 2.5rem;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 550px;
+    box-shadow: 0 15px 50px rgba(0,0,0,0.4);
+    border: 1px solid var(--alice-border);
+}
+
+.alice-loader-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--alice-border);
+    padding-bottom: 1rem;
+    position: relative;
+    
+    h2 {
+        margin: 0;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--alice-primary);
+    }
+}
+
+.alice-close-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--alice-border);
+    color: var(--alice-text-muted);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    padding: 0;
+    line-height: 1;
+
+    &:hover {
+        background: rgba(231, 76, 60, 0.15);
+        color: #e74c3c;
+        border-color: rgba(231, 76, 60, 0.3);
+        transform: rotate(90deg);
+    }
+}
+
+.alice-progress-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--alice-border);
+    font-weight: 600;
+
+    &.step-active { color: var(--alice-primary); }
+    &.step-success { color: var(--alice-success); }
+    &.step-error { color: var(--alice-danger); }
+}

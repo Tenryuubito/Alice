@@ -1,0 +1,40 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:if condition="{globalIssues}">
+    <div class="alice-card global-issues-card">
+        <h3><i class="alice-icon alice-icon-warning"></i> <f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.problem_overview" /></h3>
+        
+        <f:render partial="Dashboard/Filters" />
+
+        <div class="alice-table-wrapper">
+            <table class="alice-table" id="global-issues-table" data-per-page="10">
+                <thead>
+                    <tr>
+                        <th><div class="th-content"><i class="alice-icon alice-icon-flag"></i> <f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.status" /></div></th>
+                        <th><div class="th-content"><i class="alice-icon alice-icon-file"></i> <f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.page" /></div></th>
+                        <th><div class="th-content"><i class="alice-icon alice-icon-tag"></i> <f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.type" /></div></th>
+                        <th><div class="th-content"><i class="alice-icon alice-icon-code"></i> <f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.source" /></div></th>
+                        <th><div class="th-content"><i class="alice-icon alice-icon-info"></i> <f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.problem" /></div></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <f:for each="{globalIssues}" as="issue">
+                        <tr class="alice-issue-row" data-status="{issue.status}">
+                            <td class="col-status">
+                                <span class="status-icon {f:if(condition: '{issue.status} == 2', then: 'status-error', else: 'status-warning')}">
+                                    {f:if(condition: '{issue.status} == 2', then: '✘', else: '!')}
+                                </span>
+                            </td>
+                            <td class="col-page"><a href="#" class="alice-page-link" data-pid="{issue.pid}">{issue.page}</a></td>
+                            <td class="col-type"><span class="type-badge badge-{issue.type -> f:format.case(mode: 'lower')}">{issue.type}</span></td>
+                            <td class="col-source">{issue.source -> f:format.crop(maxCharacters: 30)}</td>
+                            <td class="col-problem"><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:{issue.problem}" default="{issue.problem}" /></td>
+                        </tr>
+                    </f:for>
+                </tbody>
+            </table>
+            
+            <f:render partial="Dashboard/Pagination" />
+        </div>
+    </div>
+</f:if>
+</html>

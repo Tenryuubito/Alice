@@ -32,6 +32,8 @@ return [
                 'index',
                 'analyze',
                 'saveSettings',
+                'getSitePages',
+                'analyzeAll',
             ],
         ],
     ],

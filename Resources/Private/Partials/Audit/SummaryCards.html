@@ -1,0 +1,27 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<div class="alice-grid">
+    <!-- LCP Card -->
+    <div id="lcp-card" class="alice-card vital-card">
+        <div class="vital-label"><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:vital.lcp" /></div>
+        <div id="lcp-value" class="vital-value"><f:format.number decimals="2">{analysis.lcp}</f:format.number>s</div>
+        <div id="lcp-status" class="vital-status"></div>
+        <div class="vital-target"><f:format.raw><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:vital.target" arguments="{0: '< 2.5s'}" /></f:format.raw></div>
+    </div>
+
+    <!-- CLS Card -->
+    <div id="cls-card" class="alice-card vital-card">
+        <div class="vital-label"><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:vital.cls" /></div>
+        <div id="cls-value" class="vital-value"><f:format.number decimals="3">{analysis.cls}</f:format.number></div>
+        <div id="cls-status" class="vital-status"></div>
+        <div class="vital-target"><f:format.raw><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:vital.target" arguments="{0: '< 0.1'}" /></f:format.raw></div>
+    </div>
+
+    <!-- INP Card -->
+    <div id="inp-card" class="alice-card vital-card">
+        <div class="vital-label"><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:vital.inp" /></div>
+        <div id="inp-value" class="vital-value"><f:format.number decimals="0">{analysis.inp}</f:format.number>ms</div>
+        <div id="inp-status" class="vital-status"></div>
+        <div class="vital-target"><f:format.raw><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:vital.target" arguments="{0: '< 200ms'}" /></f:format.raw></div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,250 @@
+.alice-table-wrapper {
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
+    border: 1px solid var(--alice-border);
+    overflow: hidden;
+    margin-top: 1.5rem;
+}
+
+.alice-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+
+    th {
+        padding: 1rem 1.5rem;
+        background: rgba(255, 255, 255, 0.03);
+        color: var(--alice-text-muted);
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.05em;
+        border-bottom: 1px solid var(--alice-border);
+        
+        .th-content {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            white-space: nowrap;
+        }
+
+        i.alice-icon {
+            font-size: 1.1rem;
+        }
+    }
+
+    td {
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        vertical-align: middle;
+        transition: background 0.2s ease;
+    }
+
+    tr.alice-issue-row {
+        cursor: pointer;
+        
+        &:hover {
+            background: rgba(255, 255, 255, 0.04);
+            
+            td { color: var(--alice-text); }
+        }
+
+        &:last-child td { border-bottom: none; }
+    }
+
+    .col-status {
+        width: 60px;
+        text-align: center;
+        
+        .status-icon {
+            width: 28px;
+            height: 28px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 0.75rem;
+            font-weight: 800;
+
+            &.status-error { background: rgba(231, 76, 60, 0.15); color: #e74c3c; }
+            &.status-warning { background: rgba(243, 156, 18, 0.15); color: #f1c40f; }
+        }
+    }
+
+    .col-page {
+        font-weight: 600;
+        
+        a {
+            color: var(--alice-primary);
+            &:hover { text-decoration: underline; }
+        }
+    }
+
+    .col-type {
+        width: 140px;
+        
+        .type-badge {
+            padding: 0.35rem 0.85rem;
+            border-radius: 8px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--alice-text-muted);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: inline-block;
+            line-height: 1;
+
+            &.badge-seo { background: rgba(52, 152, 219, 0.15); color: #3498db; border-color: rgba(52, 152, 219, 0.3); }
+            &.badge-image { background: rgba(155, 89, 182, 0.15); color: #9b59b6; border-color: rgba(155, 89, 182, 0.3); }
+            &.badge-performance { background: rgba(241, 196, 15, 0.15); color: #f1c40f; border-color: rgba(241, 196, 15, 0.3); }
+            &.badge-internal { background: rgba(46, 204, 113, 0.15); color: #2ecc71; border-color: rgba(46, 204, 113, 0.3); }
+            &.badge-external { background: rgba(155, 89, 182, 0.15); color: #9b59b6; border-color: rgba(155, 89, 182, 0.3); }
+        }
+    }
+
+    .col-source {
+        color: var(--alice-text-muted);
+        font-family: monospace;
+        font-size: 0.8rem;
+    }
+
+    .col-problem {
+        color: var(--alice-text-soft);
+        font-weight: 500;
+        line-height: 1.4;
+    }
+}
+
+.alice-pagination {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.02);
+    border-top: 1px solid var(--alice-border);
+
+    .pagination-btn {
+        min-width: 36px;
+        height: 36px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--alice-border);
+        color: var(--alice-text-muted);
+        border-radius: 8px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--alice-text);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+
+        &.active {
+            background: var(--alice-primary);
+            color: #fff;
+            border-color: var(--alice-primary);
+            box-shadow: 0 4px 12px rgba(61, 185, 255, 0.25);
+        }
+    }
+}
+
+.filtered-out {
+    display: none !important;
+}
+
+/* Page List Specific Styles */
+.alice-pages-list-card {
+    margin-top: 2rem;
+    animation: aliceFadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+}
+
+.alice-page-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    .uid-badge {
+        font-family: var(--alice-font-mono);
+        color: var(--alice-text-muted);
+        font-size: 0.7rem;
+        background: rgba(255, 255, 255, 0.05);
+        padding: 0.1rem 0.4rem;
+        border-radius: 4px;
+        border: 1px solid var(--alice-border);
+    }
+
+    .title-text {
+        font-weight: 500;
+        color: var(--alice-text);
+    }
+}
+
+.alice-status-badge {
+    padding: 0.3rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    display: inline-flex;
+    align-items: center;
+}
+
+.status-success {
+    background: rgba(46, 204, 113, 0.15);
+    color: #2ecc71;
+    border: 1px solid rgba(46, 204, 113, 0.2);
+}
+
+.status-pending {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--alice-text-muted);
+    border: 1px solid var(--alice-border);
+}
+
+.vital-mini-badge {
+    padding: 0.25rem 0.6rem;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 0.75rem;
+    display: inline-block;
+
+    &.good {
+        background: rgba(46, 204, 113, 0.1);
+        color: #2ecc71;
+    }
+
+    &.poor {
+        background: rgba(231, 76, 60, 0.1);
+        color: #e74c3c;
+    }
+}
+
+.alice-btn-icon {
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--alice-border);
+    color: var(--alice-text-muted);
+    transition: all 0.2s ease;
+
+    &:hover {
+        background: var(--alice-primary);
+        color: #fff;
+        border-color: var(--alice-primary);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(61, 185, 255, 0.3);
+    }
+}

@@ -1,0 +1,62 @@
+<f:if condition="{settings}">
+    <div class="alice-card global-settings-card">
+        <h3><i class="alice-icon alice-icon-settings"></i>
+            <f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:settings.title" />
+        </h3>
+
+        <f:form action="saveSettings" name="settings" object="{settings}">
+
+            <!-- Performance Section -->
+            <div class="alice-settings-section">
+                <h3>
+                    <f:translate
+                        key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:settings.section.thresholds" />
+                </h3>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="alice-form-group">
+                            <label for="lcp-threshold">
+                                <f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:vital.lcp" /> (s)
+                            </label>
+                            <f:form.textfield property="lcp" id="lcp-threshold" class="form-control" type="number" step="0.1" value="{settings.thresholds.lcp}" />
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="alice-form-group">
+                            <label for="cls-threshold">
+                                <f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:vital.cls" />
+                            </label>
+                            <f:form.textfield property="cls" id="cls-threshold" class="form-control" type="number" step="0.01" value="{settings.thresholds.cls}" />
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="alice-form-group">
+                            <label for="inp-threshold">
+                                <f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:vital.inp" /> (ms)
+                            </label>
+                            <f:form.textfield property="inp" id="inp-threshold" class="form-control" type="number" step="1" value="{settings.thresholds.inp}" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alice-checkbox-group">
+                    <label class="alice-switch">
+                        <f:form.checkbox property="autoLazyLoading" value="1" id="auto-lazyloading" />
+                        <span class="alice-switch-slider"></span>
+                    </label>
+                    <label for="auto-lazyloading" class="alice-switch-label">
+                        <f:translate
+                            key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:settings.label.auto_lazyloading" />
+                    </label>
+                </div>
+            </div>
+
+            <div class="alice-form-actions">
+                <f:form.submit
+                    value="{f:translate(key: 'LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:settings.button.save')}"
+                    class="alice-btn primary" />
+            </div>
+        </f:form>
+    </div>
+</f:if>

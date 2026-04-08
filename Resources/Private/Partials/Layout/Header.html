@@ -1,0 +1,42 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<div class="alice-header">
+    <h1><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:header.title" /></h1>
+    <div class="alice-controls">
+        <f:if condition="{analysis}">
+            <div class="alice-last-audit">
+                <f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.last_audit" arguments="{0: '{analysis.tstamp -> f:format.date(format: \'d.m.Y H:i\')}'}" />
+            </div>
+        </f:if>
+
+        <div class="alice-actions">
+            <f:if condition="{pageId} > 0">
+                <f:if condition="{siteFound}">
+                    <button id="start-audit-btn" class="alice-btn primary" 
+                            data-page-id="{pageId}"
+                            data-audit-runner-uri="{f:uri.resource(path: 'Build/JavaScript/AuditRunner.js')}">
+                        <i class="alice-icon alice-icon-bolt"></i> <f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:button.start_audit" />
+                    </button>
+                </f:if>
+            </f:if>
+
+
+            <f:if condition="{isSiteRoot}">
+                <f:then>
+                    <button id="analyze-all-btn" class="alice-btn primary"
+                            data-page-id="{pageId}"
+                            data-audit-runner-uri="{f:uri.resource(path: 'Build/JavaScript/AuditRunner.js')}">
+                        <i class="alice-icon alice-icon-bolt"></i> <f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:settings.button.analyze_all" />
+                    </button>
+                </f:then>
+                <f:else>
+                    <f:if condition="!{siteFound}">
+                        <div class="alice-alert alice-alert-warning alice-alert-badge">
+                            <i class="alice-icon alice-icon-warning"></i> <f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:error.no_site_found" />
+                        </div>
+                    </f:if>
+                </f:else>
+            </f:if>
+        </div>
+    </div>
+</div>
+</html>

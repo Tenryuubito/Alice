@@ -1,0 +1,95 @@
+.module-alice {
+    background: var(--alice-bg);
+    min-height: 100vh;
+    font-family: var(--alice-font);
+    color: var(--alice-text);
+    padding: 2rem;
+    line-height: 1.6;
+    animation: aliceFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+
+    // Global resets for Alice container
+    // Specific resets for Alice container list defaults
+    ul, ol, li {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        &::before, &::after { display: none; }
+    }
+
+    * { box-sizing: border-box; }
+
+    a {
+        color: var(--alice-primary);
+        text-decoration: none;
+        transition: color 0.2s ease;
+        &:hover {
+            color: var(--alice-info);
+            text-decoration: underline;
+        }
+    }
+}
+
+/* Custom Toggle Switch */
+.alice-switch {
+    position: relative;
+    display: inline-flex;
+    width: 44px;
+    height: 24px;
+    flex-shrink: 0;
+
+    input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+        
+        &:checked + .alice-switch-slider {
+            background-color: var(--alice-primary);
+            box-shadow: 0 4px 10px rgba(61, 185, 255, 0.3);
+            border-color: var(--alice-primary);
+        }
+
+        &:checked + .alice-switch-slider:before {
+            transform: translateX(20px);
+        }
+    }
+}
+
+.alice-switch-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(0, 0, 0, 0.2);
+    transition: .3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 34px;
+    border: 1px solid var(--alice-border);
+
+    &:before {
+        position: absolute;
+        content: "";
+        height: 16px; width: 16px;
+        left: 3px; bottom: 3px;
+        background-color: #fff;
+        transition: .3s cubic-bezier(0.4, 0, 0.2, 1);
+        border-radius: 50%;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+}
+
+.hidden { display: none !important; }
+
+#alice-analyzer-iframe {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    opacity: 0.005;
+    pointer-events: none;
+    z-index: -1;
+    border: none;
+}
+
+@keyframes aliceFadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}

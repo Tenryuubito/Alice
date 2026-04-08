@@ -1,0 +1,69 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<div class="alice-card alice-pages-list-card">
+    <div class="alice-card-header">
+        <h3><i class="alice-icon alice-icon-list"></i> <f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.pages_overview" /></h3>
+    </div>
+    <div class="alice-card-body p-0">
+        <table class="alice-table">
+            <thead>
+                <tr>
+                    <th><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.page" /></th>
+                    <th>Status</th>
+                    <th>LCP</th>
+                    <th>CLS</th>
+                    <th>INP</th>
+                    <th><f:translate key="LLL:EXT:alice/Resources/Private/Language/locallang_mod.xlf:label.last_audit_short" /></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <f:for each="{sitePages}" as="page">
+                    <tr class="alice-page-row">
+                        <td>
+                            <div class="alice-page-title">
+                                <span class="uid-badge">#{page.uid}</span>
+                                <span class="title-text">{page.title}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <f:if condition="{page.lastAudit}">
+                                <f:then><span class="alice-status-badge status-success">Analysiert</span></f:then>
+                                <f:else><span class="alice-status-badge status-pending">Ausstehend</span></f:else>
+                            </f:if>
+                        </td>
+                        <td>
+                            <f:if condition="{page.lcp}">
+                                <f:then><span class="vital-mini-badge {f:if(condition: '{page.lcp} > {settings.thresholds.lcp}', then: 'poor', else: 'good')}">{page.lcp}s</span></f:then>
+                                <f:else>--</f:else>
+                            </f:if>
+                        </td>
+                        <td>
+                            <f:if condition="{page.cls}">
+                                <f:then><span class="vital-mini-badge {f:if(condition: '{page.cls} > {settings.thresholds.cls}', then: 'poor', else: 'good')}">{page.cls}</span></f:then>
+                                <f:else>--</f:else>
+                            </f:if>
+                        </td>
+                        <td>
+                            <f:if condition="{page.inp}">
+                                <f:then><span class="vital-mini-badge {f:if(condition: '{page.inp} > {settings.thresholds.inp}', then: 'poor', else: 'good')}">{page.inp}ms</span></f:then>
+                                <f:else>--</f:else>
+                            </f:if>
+                        </td>
+                        <td>
+                            <f:if condition="{page.lastAudit}">
+                                <f:then>{page.lastAudit -> f:format.date(format: 'd.m.Y H:i')}</f:then>
+                                <f:else>--</f:else>
+                            </f:if>
+                        </td>
+                        <td class="text-right">
+                            <f:link.action action="index" arguments="{id: page.uid}" class="alice-btn-icon" title="Analyse auf dieser Seite öffnen">
+                                <i class="alice-icon alice-icon-eye"></i>
+                            </f:link.action>
+                        </td>
+                    </tr>
+                </f:for>
+            </tbody>
+        </table>
+    </div>
+</div>
+</html>

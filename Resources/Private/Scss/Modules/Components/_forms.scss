@@ -1,0 +1,73 @@
+.alice-form-group {
+    margin-bottom: 2rem;
+
+    label {
+        display: block;
+        margin-bottom: 0.75rem;
+        font-weight: 700;
+        font-size: 0.85rem;
+        color: var(--alice-text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .form-control {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--alice-border);
+        color: #fff;
+        padding: 0.8rem 1rem;
+        border-radius: 8px;
+        font-family: var(--alice-font);
+        transition: all 0.2s ease;
+
+        &:focus {
+            outline: none;
+            border-color: var(--alice-primary);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 0 3px rgba(61, 185, 255, 0.15);
+        }
+    }
+}
+
+.alice-settings-section {
+    margin-bottom: 4rem;
+    
+    h3 {
+        margin-bottom: 2rem;
+        font-size: 1.1rem;
+        font-weight: 800;
+        color: var(--alice-text);
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+
+        &::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: var(--alice-border);
+        }
+    }
+}
+
+.alice-checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 1.25rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    border: 1px solid var(--alice-border);
+    transition: background 0.2s ease;
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .alice-switch-label {
+        font-weight: 600;
+        cursor: pointer;
+        user-select: none;
+    }
+}
