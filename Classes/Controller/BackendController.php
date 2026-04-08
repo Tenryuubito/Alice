@@ -1,15 +1,5 @@
 <?php
 
-/**
- * This file is part of the "Alice" Extension for TYPO3 CMS.
- *
- * For the full copyright and license information, please read the
- * LICENSE file that was distributed with this source code.
- *
- * (c) 2026 Tenryuubito
- */
-
-
 declare(strict_types=1);
 
 namespace Tenryuubito\Alice\Controller;
@@ -17,29 +7,50 @@ namespace Tenryuubito\Alice\Controller;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamFactoryInterface;
+use Tenryuubito\Alice\Service\AuditService;
+use Tenryuubito\Alice\Service\IssueService;
+use TYPO3\CMS\Backend\Attribute\AsController;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Http\RequestFactory;
 use TYPO3\CMS\Core\Registry;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Backend\Attribute\AsController;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 
 /**
- * Backend Controller for Alice Performance Module
+ * Backend controller for the Alice Performance Module.
+ *
+ * Handles the main dashboard view, single and batch audit triggers,
+ * and configuration management.
  */
 #[AsController]
 class BackendController extends ActionController
 {
+    /**
+     * @var string
+     */
     protected $extensionName = 'Alice';
 
+    /**
+     * @param ModuleTemplateFactory $moduleTemplateFactory
+     * @param ConnectionPool $connectionPool
+     * @param RequestFactory $requestFactory
+     * @param SiteFinder $siteFinder
+     * @param Registry $registry
+     * @param AuditService $auditService
+     * @param IssueService $issueService
+     * @param ResponseFactoryInterface $responseFactory
+     * @param StreamFactoryInterface $streamFactory
+     */
     public function __construct(
         protected readonly ModuleTemplateFactory $moduleTemplateFactory,
         protected readonly ConnectionPool $connectionPool,
         protected readonly RequestFactory $requestFactory,
         protected readonly SiteFinder $siteFinder,
         protected readonly Registry $registry,
+        protected readonly AuditService $auditService,
+        protected readonly IssueService $issueService,
         ResponseFactoryInterface $responseFactory,
         StreamFactoryInterface $streamFactory
     ) {
@@ -47,125 +58,130 @@ class BackendController extends ActionController
         $this->streamFactory = $streamFactory;
     }
 
+    /**
+     * Main dashboard entry point.
+     * Renders either the universal overview (UID 0) or the single-page audit view.
+     *
+     * @return ResponseInterface
+     */
     public function indexAction(): ResponseInterface
     {
         $pageId = (int)($this->request->getQueryParams()['id'] ?? 0);
         $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
 
+        $globalIssues = [];
         $analysis = null;
-        // Also allow pageId = 0 for the absolute root node
-        if ($pageId >= 0) {
-            if ($pageId > 0) {
-                // Fetch latest analysis
-                $queryBuilder = $this->connectionPool->getQueryBuilderForTable('tx_alice_analysis');
-                $analysis = $queryBuilder
-                    ->select('*')
-                    ->from('tx_alice_analysis')
-                    ->where($queryBuilder->expr()->eq('pid', $queryBuilder->createNamedParameter($pageId, \Doctrine\DBAL\ParameterType::INTEGER)))
-                    ->orderBy('tstamp', 'DESC')
-                    ->setMaxResults(1)
-                    ->executeQuery()
-                    ->fetchAssociative();
+        $isSiteRoot = false;
+        $siteFound = false;
+        $sitePages = [];
 
-                if ($analysis) {
-                    $analysis['results'] = json_decode((string)$analysis['results'], true);
-                }
+        if ($pageId > 0) {
+            $queryBuilder = $this->connectionPool->getQueryBuilderForTable('tx_alice_analysis');
+            $analysis = $queryBuilder
+                ->select('*')
+                ->from('tx_alice_analysis')
+                ->where($queryBuilder->expr()->eq('pid', $queryBuilder->createNamedParameter($pageId, \Doctrine\DBAL\ParameterType::INTEGER)))
+                ->orderBy('tstamp', 'DESC')
+                ->setMaxResults(1)
+                ->executeQuery()
+                ->fetchAssociative();
 
-                try {
-                    $site = $this->siteFinder->getSiteByPageId($pageId);
-                    $moduleTemplate->assign('siteFound', true);
-                    $isSiteRoot = (bool)$this->connectionPool->getQueryBuilderForTable('pages')
-                        ->select('is_siteroot')
-                        ->from('pages')
-                        ->where('uid = ' . (int)$pageId)
-                        ->executeQuery()
-                        ->fetchOne();
-                    $moduleTemplate->assign('isSiteRoot', $isSiteRoot);
-                } catch (\TYPO3\CMS\Core\Exception\SiteNotFoundException $e) {
-                    $moduleTemplate->assign('siteFound', false);
-                    $moduleTemplate->assign('isSiteRoot', false);
-                }
-            } else {
-                // Page ID is 0 (Absolute Root)
-                $moduleTemplate->assign('siteFound', false);
-                $moduleTemplate->assign('isSiteRoot', true); // Treat root node as site root for config
+            if ($analysis) {
+                $analysis['results'] = json_decode((string)$analysis['results'], true);
             }
 
-            // Always load and assign settings from Global Extension Configuration
-            $settings = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class)->get('alice');
-            $settings['thresholds']['lcp'] = (float)($settings['lcp'] ?? 2.5);
-            $settings['thresholds']['cls'] = (float)($settings['cls'] ?? 0.1);
-            $settings['thresholds']['inp'] = (float)($settings['inp'] ?? 200);
-            $settings['auto_lazyloading'] = (bool)($settings['auto_lazyloading'] ?? false);
-            $moduleTemplate->assign('settings', $settings);
+            try {
+                $this->siteFinder->getSiteByPageId($pageId);
+                $siteFound = true;
+                $isSiteRoot = false;
+            } catch (\Throwable $e) {
+                $siteFound = false;
+            }
+        } else {
+            $siteFound = true;
+            $isSiteRoot = true;
+
+            try {
+                $qbPages = $this->connectionPool->getQueryBuilderForTable('pages');
+                $rows = $qbPages
+                    ->select('p.uid', 'p.title', 'a.lcp', 'a.cls', 'a.inp', 'a.tstamp')
+                    ->from('pages', 'p')
+                    ->leftJoin(
+                        'p',
+                        'tx_alice_analysis',
+                        'a',
+                        $qbPages->expr()->eq('p.uid', $qbPages->quoteIdentifier('a.pid'))
+                    )
+                    ->where(
+                        $qbPages->expr()->eq('p.sys_language_uid', 0),
+                        $qbPages->expr()->eq('p.deleted', 0),
+                        $qbPages->expr()->eq('p.hidden', 0),
+                        $qbPages->expr()->neq('p.uid', 0)
+                    )
+                    ->orderBy('p.uid', 'ASC')
+                    ->executeQuery()
+                    ->fetchAllAssociative();
+
+                foreach ($rows as $row) {
+                    $sitePages[] = [
+                        'uid' => (int)$row['uid'],
+                        'title' => $row['title'],
+                        'lcp' => $row['lcp'] !== null ? (float)$row['lcp'] : null,
+                        'cls' => $row['cls'] !== null ? (float)$row['cls'] : null,
+                        'inp' => $row['inp'] !== null ? (float)$row['inp'] : null,
+                        'lastAudit' => $row['tstamp'] ? (int)$row['tstamp'] : null
+                    ];
+                }
+            } catch (\Throwable $e) {
+                // Silently handle database errors in dashboard overview
+            }
+            
+            $globalIssues = $this->issueService->getGlobalIssues(0);
         }
 
-        $uriBuilder = $this->uriBuilder->reset();
-        $analyzeUri = (string)$uriBuilder
-            ->setTargetPageType(0)
-            ->uriFor('analyze');
-        
-        $saveSettingsUri = (string)$uriBuilder
-            ->setTargetPageType(0)
-            ->uriFor('saveSettings');
+        $moduleTemplate->assign('siteFound', $siteFound);
+        $moduleTemplate->assign('isSiteRoot', $isSiteRoot);
+        $moduleTemplate->assign('sitePages', $sitePages);
 
+        $settings = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class)->get('alice');
+        $settings['thresholds']['lcp'] = (float)($settings['lcp'] ?? 2.5);
+        $settings['thresholds']['cls'] = (float)($settings['cls'] ?? 0.1);
+        $settings['thresholds']['inp'] = (float)($settings['inp'] ?? 200);
+        $settings['autoLazyLoading'] = (bool)($settings['auto_lazyloading'] ?? false);
+        $moduleTemplate->assign('settings', $settings);
+
+        $uriBuilder = $this->uriBuilder->reset();
         $moduleTemplate->assign('pageId', $pageId);
         $moduleTemplate->assign('analysis', $analysis);
-        $moduleTemplate->assign('analyzeUri', $analyzeUri);
-        $moduleTemplate->assign('saveSettingsUri', $saveSettingsUri);
+        $moduleTemplate->assign('analyzeUri', (string)$uriBuilder->setTargetPageType(0)->uriFor('analyze', ['id' => $pageId]));
+        $moduleTemplate->assign('saveSettingsUri', (string)$uriBuilder->setTargetPageType(0)->uriFor('saveSettings', ['id' => $pageId]));
+        $moduleTemplate->assign('getPagesUri', (string)$uriBuilder->setTargetPageType(0)->uriFor('getSitePages', ['id' => $pageId]));
+        $moduleTemplate->assign('globalIssues', $globalIssues);
 
         return $moduleTemplate->renderResponse('Index');
     }
 
     /**
-     * Action to save site-level settings
+     * AJAX endpoint for performing a single page audit.
+     * Expects Web Vitals data in the POST body.
      *
-     * @param int $id The page ID (0 for root)
-     * @param array $settings The settings array from the form
-     */
-    public function saveSettingsAction(int $id = 0, array $settings = []): ResponseInterface
-    {
-        // Allow id >= 0 to support root node (global settings)
-        if ($id < 0) {
-            return $this->redirect('index');
-        }
-
-        $config = [
-            'lcp' => (string)($settings['thresholds']['lcp'] ?? '2.5'),
-            'cls' => (string)($settings['thresholds']['cls'] ?? '0.1'),
-            'inp' => (string)($settings['thresholds']['inp'] ?? '200'),
-            'auto_lazyloading' => ($settings['auto_lazyloading'] ?? '0') === '1' ? '1' : '0'
-        ];
-
-        // Save to Global Extension Configuration
-        GeneralUtility::makeInstance(\TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class)->set('alice', $config);
-        
-        $this->addFlashMessage('Global settings saved successfully.');
-
-        return $this->redirect('index', null, null, ['id' => $id]);
-    }
-
-    /**
-     * AJAX Action to analyze a page and store results
+     * @return ResponseInterface
      */
     public function analyzeAction(): ResponseInterface
     {
         try {
-            $pageId = (int)($this->request->getQueryParams()['id'] ?? 0);
+            $data = $this->request->getParsedBody();
+            if (empty($data)) {
+                $data = json_decode((string)$this->request->getBody(), true);
+            }
+
+            $pageId = (int)($data['id'] ?? $this->request->getQueryParams()['id'] ?? 0);
             if ($pageId <= 0) {
                 throw new \InvalidArgumentException('Invalid Page ID');
             }
 
-            // 1. Fetch Page Content (using shared BE cookie for restricted pages)
-            try {
-                $site = $this->siteFinder->getSiteByPageId($pageId);
-            } catch (\TYPO3\CMS\Core\Exception\SiteNotFoundException $e) {
-                throw new \RuntimeException('The selected page (ID: ' . $pageId . ') is not part of a valid Site Configuration. Please ensure this page or its parent has a "Site Root" defined.');
-            }
-
+            $site = $this->siteFinder->getSiteByPageId($pageId);
             $url = (string)$site->getRouter()->generateUri($pageId, ['no_cache' => '1']);
-            
-            // Get the current backend session cookie
             $beCookie = $_COOKIE['be_typo_user'] ?? '';
             
             $response = $this->requestFactory->request($url, 'GET', [
@@ -176,233 +192,194 @@ class BackendController extends ActionController
             ]);
 
             $html = (string)$response->getBody();
+            $results = $this->auditService->performHtmlAudit($html, $url);
 
-            // 2. Perform SEO & Image Audit
-            $results = $this->performHtmlAudit($html, $url);
-
-            // 3. Collect Web Vitals from POST data
-            $postData = $this->request->getParsedBody()['vitals'] ?? [];
+            $postData = $data['vitals'] ?? [];
             $lcp = (float)($postData['lcp'] ?? 0);
             $cls = (float)($postData['cls'] ?? 0);
             $inp = (float)($postData['inp'] ?? 0);
 
-            // 4. Persistence
-            $connection = $this->connectionPool->getConnectionForTable('tx_alice_analysis');
+            $summary = $this->auditService->calculateSummary($results, $lcp, $cls, $inp);
             
-            // Safety check for table existence
-            $schemaManager = $connection->createSchemaManager();
-            if (!$schemaManager->tablesExist(['tx_alice_analysis'])) {
-                throw new \RuntimeException('Database table "tx_alice_analysis" is missing. Please run the TYPO3 Database Update in the Maintenance module.');
-            }
-
-            $queryBuilder = $this->connectionPool->getQueryBuilderForTable('tx_alice_analysis');
-
-            // Check if record exists
-            $existing = $queryBuilder
-                ->select('uid')
-                ->from('tx_alice_analysis')
-                ->where($queryBuilder->expr()->eq('pid', $queryBuilder->createNamedParameter($pageId, \Doctrine\DBAL\ParameterType::INTEGER)))
-                ->executeQuery()
-                ->fetchOne();
-
-            $data = [
+            $connection = $this->connectionPool->getConnectionForTable('tx_alice_analysis');
+            $dbData = [
                 'pid' => $pageId,
                 'tstamp' => time(),
                 'results' => json_encode($results),
                 'lcp' => $lcp,
                 'cls' => $cls,
-                'inp' => $inp
+                'inp' => $inp,
+                'status' => $summary['status'],
+                'errors' => $summary['errors'],
+                'warnings' => $summary['warnings']
             ];
 
-            if ($existing) {
-                $connection->update('tx_alice_analysis', $data, ['uid' => (int)$existing]);
-            } else {
-                $data['crdate'] = time();
-                $connection->insert('tx_alice_analysis', $data);
-            }
+            $queryBuilder = $this->connectionPool->getQueryBuilderForTable('tx_alice_analysis');
+            $existing = $queryBuilder->select('uid')->from('tx_alice_analysis')
+                ->where($queryBuilder->expr()->eq('pid', $queryBuilder->createNamedParameter($pageId, \Doctrine\DBAL\ParameterType::INTEGER)))
+                ->executeQuery()->fetchOne();
 
-            $jsonResponse = json_encode([
-                'success' => true,
-                'analysis' => [
-                    'pid' => $pageId,
-                    'tstamp' => time(),
-                    'results' => $results, // Use raw array here
-                    'lcp' => $lcp,
-                    'cls' => $cls,
-                    'inp' => $inp
-                ]
-            ]);
+            if ($existing) {
+                $connection->update('tx_alice_analysis', $dbData, ['uid' => (int)$existing]);
+            } else {
+                $dbData['crdate'] = time();
+                $connection->insert('tx_alice_analysis', $dbData);
+            }
 
             return $this->responseFactory->createResponse()
                 ->withHeader('Content-Type', 'application/json; charset=utf-8')
-                ->withBody($this->streamFactory->createStream($jsonResponse));
+                ->withBody($this->streamFactory->createStream(json_encode(['success' => true])));
 
         } catch (\Throwable $e) {
-            $errorResponse = json_encode([
-                'success' => false,
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ]);
             return $this->responseFactory->createResponse(500)
                 ->withHeader('Content-Type', 'application/json; charset=utf-8')
-                ->withBody($this->streamFactory->createStream($errorResponse));
+                ->withBody($this->streamFactory->createStream(json_encode(['success' => false, 'error' => $e->getMessage()])));
         }
     }
 
-    protected function performHtmlAudit(string $html, string $baseUrl = ''): array
+    /**
+     * Persists global extension settings.
+     *
+     * @param array $settings
+     * @return ResponseInterface
+     */
+    public function saveSettingsAction(array $settings): ResponseInterface
     {
-        $results = [
-            'images' => [],
-            'seo' => [],
-            'links' => []
-        ];
+        $config = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class);
+        $current = $config->get('alice');
 
-        if (empty($html)) {
-            return $results;
+        $current['lcp'] = (float)$settings['lcp'];
+        $current['cls'] = (float)$settings['cls'];
+        $current['inp'] = (int)$settings['inp'];
+        $current['auto_lazyloading'] = (bool)($settings['autoLazyLoading'] ?? false);
+
+        $config->set('alice', $current);
+
+        $this->addFlashMessage('Configuration saved successfully.');
+        return $this->redirect('index');
+    }
+
+    /**
+     * Placeholder for global analysis triggering.
+     *
+     * @return ResponseInterface
+     */
+    public function analyzeAllAction(): ResponseInterface
+    {
+        $this->addFlashMessage('Global Analysis triggered (Simulation for now).');
+        return $this->redirect('index');
+    }
+
+    /**
+     * AJAX endpoint to retrieve all page IDs for the current site context.
+     *
+     * @return ResponseInterface
+     */
+    public function getSitePagesAction(): ResponseInterface
+    {
+        $data = $this->request->getParsedBody();
+        if (empty($data)) {
+            $data = json_decode((string)$this->request->getBody(), true);
         }
+        $pageId = (int)($this->request->getQueryParams()['id'] ?? $data['id'] ?? 0);
+        $pids = [];
 
-        // Handle UTF-8 for DOMDocument
-        $html = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
-
-        $dom = new \DOMDocument();
-        @$dom->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-        $xpath = new \DOMXPath($dom);
-
-        // --- Images ---
-        foreach ($dom->getElementsByTagName('img') as $img) {
-            if (!$img instanceof \DOMElement) {
-                continue;
+        try {
+            if ($pageId > 0) {
+                $site = $this->siteFinder->getSiteByPageId($pageId);
+                $pids = $this->getPageUidsForRoot($site->getRootPageId());
+            } else {
+                foreach ($this->siteFinder->getAllSites() as $site) {
+                    $pids = array_merge($pids, $this->getPageUidsForRoot($site->getRootPageId()));
+                }
             }
             
-            $src = $img->getAttribute('src');
-            if (empty($src)) {
-                $src = $img->getAttribute('data-src') ?: $img->getAttribute('srcset') ?: '';
-            }
+            return $this->responseFactory->createResponse()
+                ->withHeader('Content-Type', 'application/json; charset=utf-8')
+                ->withBody($this->streamFactory->createStream(json_encode(['pages' => array_unique($pids), 'success' => true])));
 
-            if (empty($src)) {
-                continue;
-            }
-
-            $alt = $img->getAttribute('alt');
-            $title = $img->getAttribute('title');
-            $width = $img->getAttribute('width');
-            $height = $img->getAttribute('height');
-            $loading = $img->getAttribute('loading');
-
-            $filename = basename(parse_url($src, PHP_URL_PATH) ?: $src);
-
-            $issue = null;
-            if (empty($alt)) {
-                $issue = 'Missing alt tag';
-            }
-
-            $results['images'][] = [
-                'src' => $src,
-                'filename' => $filename,
-                'alt' => $alt,
-                'title' => $title,
-                'width' => $width,
-                'height' => $height,
-                'loading' => $loading ?: 'eager',
-                'issue' => $issue
-            ];
+        } catch (\Throwable $e) {
+            return $this->responseFactory->createResponse()
+                ->withHeader('Content-Type', 'application/json; charset=utf-8')
+                ->withBody($this->streamFactory->createStream(json_encode([
+                    'pages' => [],
+                    'success' => false,
+                    'error' => $e->getMessage()
+                ])));
         }
+    }
 
-        // --- Links ---
-        $links = $dom->getElementsByTagName('a');
-        $count = 0;
-        $maxLinks = 50; 
-        
-        $baseHost = parse_url($baseUrl, PHP_URL_HOST) ?: '';
+    /**
+     * Fetches page data including latest analysis results for a specific root.
+     *
+     * @param int $rootPageId
+     * @return array
+     */
+    protected function getPagesForRoot(int $rootPageId): array
+    {
+        $sitePages = [];
+        try {
+            $qbPages = $this->connectionPool->getQueryBuilderForTable('pages');
+            $rows = $qbPages
+                ->select('p.uid', 'p.title', 'a.lcp', 'a.cls', 'a.inp', 'a.tstamp')
+                ->from('pages', 'p')
+                ->leftJoin(
+                    'p',
+                    'tx_alice_analysis',
+                    'a',
+                    $qbPages->expr()->eq('p.uid', $qbPages->quoteIdentifier('a.pid'))
+                )
+                ->where(
+                    $qbPages->expr()->eq('p.sys_language_uid', 0),
+                    $qbPages->expr()->eq('p.deleted', 0),
+                    $qbPages->expr()->eq('p.hidden', 0),
+                    $qbPages->expr()->or(
+                        $qbPages->expr()->eq('p.uid', $qbPages->createNamedParameter($rootPageId, \Doctrine\DBAL\ParameterType::INTEGER)),
+                        $qbPages->expr()->eq('p.pid', $qbPages->createNamedParameter($rootPageId, \Doctrine\DBAL\ParameterType::INTEGER))
+                    )
+                )
+                ->executeQuery()
+                ->fetchAllAssociative();
 
-        foreach ($links as $link) {
-            if (!$link instanceof \DOMElement || $count >= $maxLinks) {
-                continue;
+            foreach ($rows as $row) {
+                $sitePages[] = [
+                    'uid' => (int)$row['uid'],
+                    'title' => $row['title'],
+                    'lcp' => $row['lcp'] !== null ? (float)$row['lcp'] : null,
+                    'cls' => $row['cls'] !== null ? (float)$row['cls'] : null,
+                    'inp' => $row['inp'] !== null ? (float)$row['inp'] : null,
+                    'lastAudit' => $row['tstamp'] ? (int)$row['tstamp'] : null
+                ];
             }
+        } catch (\Throwable $e) {
+            // Silently handle database errors
+        }
+        return $sitePages;
+    }
 
-            $href = $link->getAttribute('href');
-            $text = trim($link->textContent) ?: '---';
+    /**
+     * Retrieves all page UIDs recursively for a given root page.
+     *
+     * @param int $rootPageId
+     * @return array
+     */
+    protected function getPageUidsForRoot(int $rootPageId): array
+    {
+        $qb = $this->connectionPool->getQueryBuilderForTable('pages');
+        $rows = $qb->select('uid')
+            ->from('pages')
+            ->where(
+                $qb->expr()->eq('sys_language_uid', 0),
+                $qb->expr()->eq('deleted', 0),
+                $qb->expr()->eq('hidden', 0),
+                $qb->expr()->or(
+                    $qb->expr()->eq('uid', $qb->createNamedParameter($rootPageId, \Doctrine\DBAL\ParameterType::INTEGER)),
+                    $qb->expr()->eq('pid', $qb->createNamedParameter($rootPageId, \Doctrine\DBAL\ParameterType::INTEGER))
+                )
+            )
+            ->executeQuery()
+            ->fetchAllAssociative();
             
-            if (empty($href) || str_starts_with($href, '#') || str_starts_with($href, 'javascript:') || str_starts_with($href, 'mailto:') || str_starts_with($href, 'tel:')) {
-                continue;
-            }
-
-            // Resolve URL
-            $fullUrl = $href;
-            if (!str_starts_with($href, 'http')) {
-                $fullUrl = rtrim($baseUrl, '/') . '/' . ltrim($href, '/');
-            }
-
-            $linkHost = parse_url($fullUrl, PHP_URL_HOST) ?: '';
-            $isExternal = !empty($linkHost) && $linkHost !== $baseHost;
-
-            // Audit
-            $start = microtime(true);
-            $statusCode = 0;
-            $accessible = false;
-            
-            try {
-                $response = $this->requestFactory->request($fullUrl, 'HEAD', [
-                    'headers' => ['User-Agent' => 'TYPO3 Alice LinkAuditor'],
-                    'connect_timeout' => 3.0,
-                    'timeout' => 3.0,
-                    'allow_redirects' => true,
-                    'http_errors' => false
-                ]);
-                $statusCode = $response->getStatusCode();
-                $accessible = ($statusCode >= 200 && $statusCode < 400);
-            } catch (\Throwable $e) {
-                $statusCode = 0;
-                $accessible = false;
-            }
-            $duration = round((microtime(true) - $start) * 1000); // ms
-
-            $results['links'][] = [
-                'url' => $fullUrl,
-                'text' => $text,
-                'status' => $statusCode,
-                'accessible' => $accessible,
-                'time' => $duration,
-                'isExternal' => $isExternal
-            ];
-            
-            $count++;
-        }
-
-        // --- SEO ---
-        $results['seo'] = [
-            'issues' => [],
-            'inventory' => []
-        ];
-
-        $titleNode = $dom->getElementsByTagName('title');
-        if ($titleNode->length === 0) {
-            $results['seo']['issues'][] = 'error.missing_title';
-        }
-
-        $mandatory = ['description', 'keywords', 'robots'];
-        foreach ($mandatory as $name) {
-            $tag = $xpath->query('//meta[@name="' . $name . '"]/@content');
-            if ($tag->length === 0) {
-                $results['seo']['issues'][] = 'error.missing_' . $name;
-            }
-        }
-
-        $metas = $dom->getElementsByTagName('meta');
-        foreach ($metas as $meta) {
-            if (!$meta instanceof \DOMElement) continue;
-            
-            $name = $meta->getAttribute('name') ?: $meta->getAttribute('property') ?: $meta->getAttribute('http-equiv');
-            $content = $meta->getAttribute('content');
-            $status = $meta->getAttribute('charset');
-
-            if ($status) {
-                $results['seo']['inventory'][] = ['name' => 'charset', 'content' => $status];
-            } elseif ($name && $content) {
-                $results['seo']['inventory'][] = ['name' => $name, 'content' => $content];
-            }
-        }
-
-        return $results;
+        return array_column($rows, 'uid');
     }
 }

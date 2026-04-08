@@ -29,6 +29,14 @@ for (const [key, value] of Object.entries(manifest.entries)) {
 }
 
 export default defineConfig({
+  base: './',
+  resolve: {
+    alias: {
+      '@icons': resolve(__dirname, 'Resources/Private/Icons'),
+      '@modules': resolve(__dirname, 'Resources/Private/TypeScript/Modules'),
+      '@alice': resolve(__dirname, 'Resources/Private/TypeScript')
+    }
+  },
   server: {
     port: 5173,
     strictPort: true,

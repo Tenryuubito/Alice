@@ -1,4 +1,2 @@
 name: tenryuubito/alice
-label: 'Alice Performance Set'
-dependencies:
-  - typo3/fluid-styled-content
+label: 'Alice Audit Suite'

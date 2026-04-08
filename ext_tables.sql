@@ -8,6 +8,9 @@ CREATE TABLE tx_alice_analysis (
     lcp float DEFAULT '0' NOT NULL,
     cls float DEFAULT '0' NOT NULL,
     inp float DEFAULT '0' NOT NULL,
+    status int(11) DEFAULT '0' NOT NULL,
+    errors int(11) DEFAULT '0' NOT NULL,
+    warnings int(11) DEFAULT '0' NOT NULL,
 
     PRIMARY KEY (uid),
     KEY parent (pid)
