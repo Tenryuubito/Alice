@@ -59,7 +59,7 @@ class ExportViteConfigCommand extends Command
             }
             
             $settings = (array)($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['alice'] ?? []);
-            $additionalEntries = (array)($settings['additional_entries'] ?? []);
+            $additionalEntries = array_unique((array)($settings['additional_entries'] ?? []));
             
             $manifest = [
                 'publicPath' => $publicPath,
